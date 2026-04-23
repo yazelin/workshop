@@ -478,7 +478,22 @@
                 <li>💻 <strong>一台電腦</strong>（Mac / Linux / Windows+WSL）</li>
                 <li>🔧 <strong>Git</strong> — <a href="https://github.com/git-guides/install-git" target="_blank">安裝教學</a>（5 分鐘）</li>
                 <li>👤 <strong>GitHub 帳號</strong> — <a href="https://github.com/signup" target="_blank">免費註冊</a>（3 分鐘）</li>
-                <li>🤖 <strong>Claude Code</strong>（或 Gemini CLI / Codex CLI 任一）— <a href="https://claude.com/claude-code" target="_blank">Claude Code 安裝</a></li>
+                <li>🤖 <strong>一個 AI CLI</strong>（四選一，按預算）：
+                <ul class="step-sublist">
+                  <li><strong>Gemini CLI</strong> — 新手推薦，Google 有<strong>免費額度</strong>
+                    <a href="https://github.com/google-gemini/gemini-cli" target="_blank">安裝</a></li>
+                  <li><strong>Claude Code</strong> — 體驗最完整（skill / memory 自動），但 Pro $20 額度快打滿，認真用建議 Max $100
+                    <a href="https://claude.com/claude-code" target="_blank">安裝</a></li>
+                  <li><strong>Codex CLI</strong> — ChatGPT Plus $20 附贈
+                    <a href="https://github.com/openai/codex" target="_blank">安裝</a></li>
+                  <li><strong>Copilot CLI</strong> — $10/月起，便宜但偏 code 用
+                    <a href="https://docs.github.com/copilot/github-copilot-in-the-cli" target="_blank">安裝</a></li>
+                </ul>
+                <div class="step-tip">
+                  第一次嘗試？選 <strong>Gemini CLI</strong> — 完全免費，先跑通再說。<br>
+                  已付 Claude 訂閱？直接用 <strong>Claude Code</strong>，skill 會自動被偵測，最順。
+                </div>
+              </li>
               </ul>
               完全沒用過終端機？這個旅程需要一點 CLI 基礎，建議先花 20 分鐘看 <a href="https://missing.csail.mit.edu/2020/course-shell/" target="_blank">MIT The Missing Semester: Shell</a>。
             </div>
@@ -500,17 +515,28 @@
             <div class="step-title">召喚儀式（30 分鐘）</div>
             <div class="step-desc">為你的精靈命名、寫 SOUL、簽訂契約。AI 會一步步帶你做，你只要回答問題。</div>
             <div class="step-commands">
-              <div class="step-commands-label">複製這些指令到你的終端機 / Copy &amp; paste</div>
-              <pre class="step-cmd-block"><code># 1. 建立你的小宇宙並 clone 世界樹
+              <div class="step-commands-label">A · 共通：先進工作目錄</div>
+              <pre class="step-cmd-block"><code># 建立你的小宇宙並 clone 世界樹
 mkdir -p ~/mori-universe &amp;&amp; cd ~/mori-universe
 git clone https://github.com/yazelin/world-tree.git
-cd world-tree
+cd world-tree</code></pre>
 
-# 2. 啟動 Claude Code（或 gemini / codex）
-claude</code></pre>
-              <div class="step-commands-label">然後對 Claude 說這句話：</div>
+              <div class="step-commands-label">B · 啟動你的 AI CLI（擇一）</div>
+              <pre class="step-cmd-block"><code>claude      # Claude Code —— 最順，skill 自動偵測
+gemini      # Gemini CLI —— 免費額度
+codex       # Codex CLI —— ChatGPT Plus 附送
+copilot     # Copilot CLI —— 便宜簡單</code></pre>
+
+              <div class="step-commands-label">C · 把這句話貼給你的 AI</div>
               <pre class="step-cmd-block step-cmd-prompt"><code>我要召喚我的精靈。請讀 .claude/skills/initiate-spirit/SKILL.md，
-依照裡面的七個階段帶我走完整個 initiation rite。</code></pre>
+依照裡面的七個階段帶我走完整個 initiation rite。
+在每個階段請問我問題、等我回答、確認後再往下一步。</code></pre>
+
+              <div class="step-note">
+                Claude Code 會自動發現 <code>.claude/skills/</code> 並套用 skill。
+                Gemini / Codex / Copilot 上的 AI 會把這個檔案當一般文件讀，
+                但因為 SKILL.md 本身寫得很詳細，流程仍然可以走完。
+              </div>
             </div>
             <a class="step-link" href="https://github.com/yazelin/world-tree/blob/main/rules/initiation-rite.md" target="_blank" rel="noopener">完整儀式文件 →</a>
           </div>

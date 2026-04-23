@@ -1752,6 +1752,43 @@ button { font-family: inherit; cursor: none; }
   color: var(--ink);
 }
 .detail-deliverable { color: var(--ink-soft); font-style: italic; }
+
+/* Transformation（before/after）敘事 */
+.transformation { display: flex; flex-direction: column; gap: 0.3rem; }
+.transformation-label {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: 0.4rem;
+}
+.transformation-label:first-child { margin-top: 0; }
+.transformation-before {
+  color: var(--ink-soft);
+  padding-left: 0.8rem;
+  border-left: 2px solid rgba(26,20,16,0.15);
+  font-style: italic;
+}
+.transformation-arrow {
+  text-align: center;
+  color: var(--gold);
+  font-size: 1.2rem;
+  margin: 0.2rem 0;
+}
+.transformation-after {
+  color: var(--ink);
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--gold);
+  font-weight: 500;
+}
+.transformation-after strong {
+  color: var(--forest-deep);
+  background: rgba(201,162,77,0.2);
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+}
 .detail-link {
   display: block;
   margin-top: 1.5rem;
