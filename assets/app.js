@@ -96,7 +96,8 @@
     steps:   ['assets/audio/step-1.wav', 'assets/audio/step-2.wav',
               'assets/audio/step-3.wav', 'assets/audio/step-4.wav'],
   };
-  const GAIN = { forest: 0.75, birds: 0.35, footstep: 0.6 };
+  // 鳥鳴之前太輕聽不到；提高到跟森林 drone 同等明顯
+  const GAIN = { forest: 0.85, birds: 0.65, footstep: 0.6 };
 
   let audioCtx;
   let audioOn = false;
@@ -292,11 +293,17 @@
   // ----- Boot → Title 自動推進 -----
   setTimeout(() => gotoScene('title'), 1800);
 
-  // ----- Title: Enter 按鈕 → 直達 Workshop（一鍵到位） -----
-  // Path + Door 場景保留在程式碼裡當作「可選沉浸體驗」，但預設跳過
-  // 降低訪客看到作品的時間成本（舊路徑需要 2 次點擊 + 5 秒動畫）
+  // ----- Title: Enter 按鈕 → Path (2.5s) → Door (auto-open) → Workshop -----
+  // 中間場景是招牌特色（日式障子、森林 parallax），不能跳過
+  // 但縮短了節奏，總長約 4.5 秒比以前的 7+ 秒短
   document.getElementById('enterBtn').addEventListener('click', () => {
-    gotoScene('workshop');
+    gotoScene('path');
+    // Path 播 2.5 秒後進 Door
+    setTimeout(() => gotoScene('door'), 2500);
+    // Door 顯示後 1 秒自動拉開（使用者也可以自己拖）
+    setTimeout(() => {
+      if (!doorOpened) openDoor();
+    }, 3800);
   });
 
   // ----- Door: 拉開 → Workshop（支援按鈕 + 拖曳） -----
