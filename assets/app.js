@@ -602,6 +602,9 @@
     grid.appendChild(niche);
   });
   document.getElementById('artifactCount').textContent = window.ARTIFACTS.length;
+  // 召喚師檔案頁的魔道具件數（同步 ARTIFACTS 長度）
+  const statCountEl = document.getElementById('statArtifactCount');
+  if (statCountEl) statCountEl.textContent = window.ARTIFACTS.length + ' 件';
 
   // ----- Artifact Modal -----
   const modalBackdrop = document.getElementById('modalBackdrop');
