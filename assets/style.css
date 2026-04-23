@@ -370,6 +370,114 @@ button { font-family: inherit; cursor: none; }
   50%      { box-shadow: 0 0 30px 5px rgba(201,162,77,0.15); }
 }
 
+/* Title scene 白話解釋（奇幻 lore 之後） */
+.plain-explainer {
+  opacity: 0;
+  animation: fadeUp 2s var(--ease-soft) 3s forwards;
+  margin: 1.5rem auto 2rem;
+  max-width: 540px;
+  padding: 1rem 1.4rem;
+  background: rgba(10,14,12,0.5);
+  border-left: 2px solid var(--gold-soft);
+  border-right: 2px solid rgba(201,162,77,0.3);
+  border-radius: 2px;
+  text-align: left;
+  backdrop-filter: blur(4px);
+}
+.plain-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-soft);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+.plain-body {
+  font-family: var(--serif-zh);
+  font-size: 0.9rem;
+  line-height: 1.85;
+  color: var(--parchment);
+  opacity: 0.95;
+}
+.plain-body strong {
+  color: var(--firefly);
+  font-weight: 500;
+}
+
+/* Workshop 白話三欄介紹（頂部第一眼看到） */
+.ws-plain-intro {
+  max-width: 1280px;
+  margin: 1rem auto 2.5rem;
+  padding: 0 2rem;
+}
+.ws-plain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  background: linear-gradient(to bottom,
+    rgba(30,44,36,0.4) 0%,
+    rgba(10,14,12,0.5) 100%);
+  border-top: 1px solid rgba(201,162,77,0.3);
+  border-bottom: 1px solid rgba(201,162,77,0.3);
+}
+.ws-plain-col {
+  padding: 1.2rem 1.4rem;
+  border-right: 1px solid rgba(201,162,77,0.15);
+}
+.ws-plain-col:last-child { border-right: none; }
+.ws-plain-label {
+  font-family: var(--serif-en);
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+  font-style: italic;
+}
+.ws-plain-text {
+  font-family: var(--serif-zh);
+  font-size: 0.82rem;
+  line-height: 1.8;
+  color: var(--parchment);
+  opacity: 0.9;
+}
+.ws-plain-text strong {
+  color: var(--firefly);
+  font-weight: 500;
+}
+
+/* Niche plate 加「這個幹嘛的」一行 */
+.plate-effect {
+  font-family: var(--serif-zh);
+  font-size: 0.72rem;
+  line-height: 1.65;
+  color: rgba(242, 230, 198, 0.82);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  margin: 0.4rem 0;
+  padding: 0 0.3rem;
+  position: relative;
+  z-index: 2;
+  min-height: 2.6em; /* 兩行的穩定高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.niche:hover .plate-effect {
+  color: var(--parchment);
+}
+
+/* RWD: 三欄變一欄 */
+@media (max-width: 820px) {
+  .ws-plain-grid { grid-template-columns: 1fr; }
+  .ws-plain-col {
+    border-right: none;
+    border-bottom: 1px solid rgba(201,162,77,0.15);
+  }
+  .ws-plain-col:last-child { border-bottom: none; }
+}
+
 /* Title scene 的「第一次來？」連結 */
 .first-timer-link {
   opacity: 0;

@@ -292,11 +292,11 @@
   // ----- Boot → Title 自動推進 -----
   setTimeout(() => gotoScene('title'), 1800);
 
-  // ----- Title: Enter 按鈕 → Path → Door -----
+  // ----- Title: Enter 按鈕 → 直達 Workshop（一鍵到位） -----
+  // Path + Door 場景保留在程式碼裡當作「可選沉浸體驗」，但預設跳過
+  // 降低訪客看到作品的時間成本（舊路徑需要 2 次點擊 + 5 秒動畫）
   document.getElementById('enterBtn').addEventListener('click', () => {
-    gotoScene('path');
-    // Path 播放 5 秒後進 door
-    setTimeout(() => gotoScene('door'), 5200);
+    gotoScene('workshop');
   });
 
   // ----- Door: 拉開 → Workshop（支援按鈕 + 拖曳） -----
@@ -554,6 +554,7 @@
       <div class="niche-plate">
         <div class="plate-name-zh">${a.nameZh}</div>
         <div class="plate-name-en">${a.nameEn}</div>
+        <div class="plate-effect">${a.effect}</div>
         <div class="plate-school">
           <span class="plate-school-icon">${schoolIconSvg}</span>
           <span class="plate-school-name">${a.school}</span>
