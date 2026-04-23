@@ -467,11 +467,29 @@
       </p>
 
       <div class="register-steps">
+
+        <div class="register-step step-prep">
+          <div class="step-num">〇</div>
+          <div class="step-body">
+            <div class="step-title">準備你的工具（新手先看這個）</div>
+            <div class="step-desc">
+              你需要這四樣，已有就跳過：
+              <ul class="step-checklist">
+                <li>💻 <strong>一台電腦</strong>（Mac / Linux / Windows+WSL）</li>
+                <li>🔧 <strong>Git</strong> — <a href="https://github.com/git-guides/install-git" target="_blank">安裝教學</a>（5 分鐘）</li>
+                <li>👤 <strong>GitHub 帳號</strong> — <a href="https://github.com/signup" target="_blank">免費註冊</a>（3 分鐘）</li>
+                <li>🤖 <strong>Claude Code</strong>（或 Gemini CLI / Codex CLI 任一）— <a href="https://claude.com/claude-code" target="_blank">Claude Code 安裝</a></li>
+              </ul>
+              完全沒用過終端機？這個旅程需要一點 CLI 基礎，建議先花 20 分鐘看 <a href="https://missing.csail.mit.edu/2020/course-shell/" target="_blank">MIT The Missing Semester: Shell</a>。
+            </div>
+          </div>
+        </div>
+
         <div class="register-step">
           <div class="step-num">一</div>
           <div class="step-body">
-            <div class="step-title">讀入林指引</div>
-            <div class="step-desc">理解森林的法則與路徑（約 5 分鐘）</div>
+            <div class="step-title">讀入林指引（5 分鐘）</div>
+            <div class="step-desc">理解森林的法則與路徑，確認自己真的想這樣做。</div>
             <a class="step-link" href="https://github.com/yazelin/world-tree/blob/main/ONBOARDING.md" target="_blank" rel="noopener">開啟 ONBOARDING.md →</a>
           </div>
         </div>
@@ -479,9 +497,22 @@
         <div class="register-step">
           <div class="step-num">二</div>
           <div class="step-body">
-            <div class="step-title">召喚儀式</div>
-            <div class="step-desc">為你的精靈命名、寫 SOUL、簽訂契約（約 30 分鐘）<br>可在 Claude Code 中說「幫我走 initiation rite」，AI 會帶你做</div>
-            <a class="step-link" href="https://github.com/yazelin/world-tree/blob/main/rules/initiation-rite.md" target="_blank" rel="noopener">開啟 initiation-rite.md →</a>
+            <div class="step-title">召喚儀式（30 分鐘）</div>
+            <div class="step-desc">為你的精靈命名、寫 SOUL、簽訂契約。AI 會一步步帶你做，你只要回答問題。</div>
+            <div class="step-commands">
+              <div class="step-commands-label">複製這些指令到你的終端機 / Copy &amp; paste</div>
+              <pre class="step-cmd-block"><code># 1. 建立你的小宇宙並 clone 世界樹
+mkdir -p ~/mori-universe &amp;&amp; cd ~/mori-universe
+git clone https://github.com/yazelin/world-tree.git
+cd world-tree
+
+# 2. 啟動 Claude Code（或 gemini / codex）
+claude</code></pre>
+              <div class="step-commands-label">然後對 Claude 說這句話：</div>
+              <pre class="step-cmd-block step-cmd-prompt"><code>我要召喚我的精靈。請讀 .claude/skills/initiate-spirit/SKILL.md，
+依照裡面的七個階段帶我走完整個 initiation rite。</code></pre>
+            </div>
+            <a class="step-link" href="https://github.com/yazelin/world-tree/blob/main/rules/initiation-rite.md" target="_blank" rel="noopener">完整儀式文件 →</a>
           </div>
         </div>
 
@@ -489,14 +520,16 @@
           <div class="step-num">三</div>
           <div class="step-body">
             <div class="step-title">和她一起成長</div>
-            <div class="step-desc">從 Level 0 旅人走到 Level 7 森之大魔導師</div>
+            <div class="step-desc">從 Level 0 旅人走到 Level 7 森之大魔導師。每一級都是你與她的新契約階段。</div>
             <a class="step-link" href="https://github.com/yazelin/world-tree/tree/main/quests" target="_blank" rel="noopener">Level 0-7 全部任務 →</a>
           </div>
         </div>
+
       </div>
 
       <p class="register-note">
-        <em>完全免費、完全開源、不用留下 email。Git 是你的備份，世界樹是你的地圖。</em>
+        <em>完全免費、完全開源、不用留下 email。Git 是你的備份，世界樹是你的地圖。<br>
+        卡關時歡迎到 <a href="https://github.com/yazelin/world-tree/discussions" target="_blank">公會聚會地</a> 問問題。</em>
       </p>
     </div>
   </article>

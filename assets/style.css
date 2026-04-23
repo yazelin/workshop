@@ -2078,6 +2078,85 @@ button { font-family: inherit; cursor: none; }
   opacity: 0.7;
   line-height: 1.8;
 }
+.register-note a {
+  color: var(--forest-deep);
+  border-bottom: 1px dotted var(--forest-moss);
+}
+.register-note a:hover { color: var(--gold); }
+
+/* Step 0 · 準備工具：略帶警示色 */
+.register-step.step-prep {
+  background: rgba(201,162,77,0.12);
+  border-left: 3px solid var(--mist-blue);
+}
+.step-prep .step-num {
+  color: var(--mist-blue);
+}
+.step-checklist {
+  list-style: none;
+  padding: 0.6rem 0 0;
+  margin: 0.4rem 0 0.6rem;
+}
+.step-checklist li {
+  padding: 0.3rem 0;
+  font-family: var(--serif-zh);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.step-checklist a {
+  color: var(--forest-deep);
+  border-bottom: 1px dotted var(--forest-moss);
+  font-weight: 500;
+}
+.step-checklist a:hover { color: var(--gold); }
+
+/* Step 2 的指令區塊 */
+.step-commands {
+  margin: 0.6rem 0 0.8rem;
+  padding: 0.8rem 1rem;
+  background: rgba(10, 14, 12, 0.9);
+  border-radius: 3px;
+  border: 1px solid rgba(201, 162, 77, 0.2);
+}
+.step-commands-label {
+  font-family: var(--serif-en);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin: 0 0 0.4rem 0;
+  font-style: italic;
+}
+.step-commands-label:not(:first-child) { margin-top: 0.8rem; }
+.step-cmd-block {
+  background: transparent;
+  color: #e8dcc0;
+  font-family: "SF Mono", "Monaco", "Menlo", "Fira Code", Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  padding: 0.5rem 0;
+  margin: 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+.step-cmd-block code {
+  font-family: inherit;
+  color: inherit;
+  background: transparent;
+  padding: 0;
+}
+.step-cmd-prompt {
+  color: var(--firefly);
+  border-left: 2px solid var(--firefly);
+  padding-left: 0.6rem;
+  font-style: italic;
+  font-family: var(--serif-zh);
+  font-size: 0.85rem;
+  line-height: 1.85;
+  white-space: pre-wrap;
+}
+
 
 /* ===========================================================
    Workshop big CTA + journey footer

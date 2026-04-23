@@ -67,6 +67,7 @@ window.ARTIFACTS = [
     actions: [
       { label: 'Gallery', url: 'https://yazelin.github.io/catime/', primary: true },
       { label: 'Telegram', url: 'https://t.me/catime_yaze' },
+      { label: 'Article', url: 'https://yazelin.github.io/2026-01-30-catime-birth/' },
       { label: 'Source', url: 'https://github.com/yazelin/catime' },
     ],
   },
@@ -82,6 +83,7 @@ window.ARTIFACTS = [
     effect: 'Cloudflare Worker + Vertex AI。自拍 → 3×3 emoji 臉 → FB 可嵌拉霸影片。',
     actions: [
       { label: '試用', url: 'https://yazelin.github.io/emoji-slot-machine/', primary: true },
+      { label: 'Article', url: 'https://yazelin.github.io/2026-04-21-emoji-slot-machine/' },
       { label: 'Source', url: 'https://github.com/yazelin/emoji-slot-machine' },
     ],
   },
@@ -96,6 +98,7 @@ window.ARTIFACTS = [
     lore: '能自動在多個創造之神之間換手，<br>繪製最切合意念的圖像。若一神拒絕，轉請下一神。',
     effect: 'AI 圖像生成 Agent Skill，支援自動模型 fallback。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2026-02-09-nanobanana-pro-clawhub-skill/' },
       { label: 'Source', url: 'https://github.com/yazelin/nanobanana-pro', primary: true },
     ],
   },
@@ -110,6 +113,7 @@ window.ARTIFACTS = [
     lore: '讓神靈（Gemini）在此作畫，<br>支援繁體符文、不留神印。',
     effect: 'Gemini AI 圖片生成 CLI + HTTP API。繁中原生、浮水印自動處理。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2026-03-31-gemini-web/' },
       { label: 'Source', url: 'https://github.com/yazelin/gemini-web', primary: true },
     ],
   },
@@ -124,6 +128,7 @@ window.ARTIFACTS = [
     lore: '為繪影魔陣準備咒文草稿的輔助匣。<br>結構化、省去散亂冥想。',
     effect: '結構化 AI 繪圖 prompt 產生器，適配 Nano Banana Pro。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2025-12-29-promptfill-intro/' },
       { label: 'Source', url: 'https://github.com/yazelin/PromptFill', primary: true },
     ],
   },
@@ -152,6 +157,7 @@ window.ARTIFACTS = [
     lore: '將墨跡化為幻燈（PPT），<br>可現場投影展示，支援線上宣講模式。',
     effect: 'Markdown → PPT，含投影模式、語法高亮。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2026-01-26-md2ppt-doc-sharetoken/' },
       { label: 'Source', url: 'https://github.com/yazelin/MD2PPT-Evolution', primary: true },
     ],
   },
@@ -166,6 +172,7 @@ window.ARTIFACTS = [
     lore: '個人圖像的次元書架，<br>不佔本空間，存入 GitHub Releases 異界永不損壞。',
     effect: '個人圖床，圖片存放在 GitHub Releases。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2026-02-04-image-bed-github-release/' },
       { label: 'Source', url: 'https://github.com/yazelin/image-bed', primary: true },
     ],
   },
@@ -180,6 +187,7 @@ window.ARTIFACTS = [
     lore: '將漫長的咒文路徑封印為短刻印，<br>單手即可傳送冒險者。',
     effect: 'Cloudflare Workers + KV 縮網址服務。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2025-12-29-cloudflare-workers-shorturl/' },
       { label: 'Source', url: 'https://github.com/yazelin/shorturl-worker', primary: true },
     ],
   },
@@ -194,6 +202,7 @@ window.ARTIFACTS = [
     lore: '讓精靈能直接指揮凡人印刷術（CUPS），<br>將任何訊息化為實體。',
     effect: 'MCP server，透過 CUPS 控制印表機。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2026-02-02-printer-mcp-server/' },
       { label: 'Source', url: 'https://github.com/yazelin/printer-mcp', primary: true },
     ],
   },
@@ -208,6 +217,7 @@ window.ARTIFACTS = [
     lore: '讓精靈與商會帳本（ERPNext）直接對話，<br>問帳、記帳不必經過凡人之手。',
     effect: 'MCP server for ERPNext REST API。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2026-02-03-erpnext-mcp-server/' },
       { label: 'Source', url: 'https://github.com/yazelin/erpnext-mcp', primary: true },
     ],
   },
@@ -222,6 +232,7 @@ window.ARTIFACTS = [
     lore: '將咒術師的口語即時記下為文字，<br>嵌入 fcitx 輸入法，隨呼隨用。',
     effect: 'ASR 語音輸入法，整合 fcitx framework。',
     actions: [
+      { label: 'Article', url: 'https://yazelin.github.io/2026-02-14-asr-ime-fcitx/' },
       { label: 'Source', url: 'https://github.com/yazelin/asr-ime-fcitx', primary: true },
     ],
   },
