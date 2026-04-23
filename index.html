@@ -126,21 +126,91 @@
 </section>
 
 <!-- ============================================================ -->
-<!-- Scene 4: Workshop Door — 門前                                 -->
+<!-- Scene 4: Shoji Door — 障子拉門                                 -->
 <!-- ============================================================ -->
 <section class="scene scene--door" id="sceneDoor">
-  <div class="door-bg">
-    <div class="door-frame">
-      <div class="door-left"></div>
-      <div class="door-right"></div>
-      <div class="door-glow"></div>
+  <div class="door-backdrop"></div>
+  <div class="shoji-scene">
+    <!-- 門內透出的光（先於門渲染，背景層） -->
+    <div class="inner-light"></div>
+
+    <!-- 左右障子門板 -->
+    <div class="shoji-panel shoji-left">
+      <svg viewBox="0 0 200 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="paperLeft" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#f4e8d0" stop-opacity="0.12"/>
+            <stop offset="0.5" stop-color="#c9a24d" stop-opacity="0.18"/>
+            <stop offset="1" stop-color="#8a6d3a" stop-opacity="0.12"/>
+          </linearGradient>
+          <filter id="paperTex" x="0" y="0" width="1" height="1">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/>
+            <feColorMatrix values="0 0 0 0 0.95  0 0 0 0 0.9  0 0 0 0 0.82  0 0 0 0.05 0"/>
+            <feComposite in2="SourceGraphic" operator="in"/>
+          </filter>
+        </defs>
+        <!-- 外木框 -->
+        <rect x="0" y="0" width="200" height="420" fill="#1a110b" stroke="#2d1d10" stroke-width="3"/>
+        <!-- 和紙面 -->
+        <rect x="8" y="8" width="184" height="404" fill="url(#paperLeft)"/>
+        <rect x="8" y="8" width="184" height="404" filter="url(#paperTex)" opacity="0.4"/>
+        <!-- 木格 Kumiko：垂直 -->
+        <g stroke="#2a1810" stroke-width="1.5" stroke-linecap="square">
+          <line x1="50" y1="8" x2="50" y2="412"/>
+          <line x1="100" y1="8" x2="100" y2="412"/>
+          <line x1="150" y1="8" x2="150" y2="412"/>
+        </g>
+        <!-- 木格 Kumiko：水平 -->
+        <g stroke="#2a1810" stroke-width="1.5" stroke-linecap="square">
+          <line x1="8" y1="60" x2="192" y2="60"/>
+          <line x1="8" y1="130" x2="192" y2="130"/>
+          <line x1="8" y1="200" x2="192" y2="200"/>
+          <line x1="8" y1="270" x2="192" y2="270"/>
+          <line x1="8" y1="340" x2="192" y2="340"/>
+        </g>
+        <!-- 把手（小金屬扣環） -->
+        <circle cx="175" cy="210" r="3.5" fill="none" stroke="#c9a24d" stroke-width="1.2"/>
+        <circle cx="175" cy="210" r="1" fill="#c9a24d"/>
+      </svg>
     </div>
+
+    <div class="shoji-panel shoji-right">
+      <svg viewBox="0 0 200 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="paperRight" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#f4e8d0" stop-opacity="0.12"/>
+            <stop offset="0.5" stop-color="#c9a24d" stop-opacity="0.18"/>
+            <stop offset="1" stop-color="#8a6d3a" stop-opacity="0.12"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="200" height="420" fill="#1a110b" stroke="#2d1d10" stroke-width="3"/>
+        <rect x="8" y="8" width="184" height="404" fill="url(#paperRight)"/>
+        <g stroke="#2a1810" stroke-width="1.5" stroke-linecap="square">
+          <line x1="50" y1="8" x2="50" y2="412"/>
+          <line x1="100" y1="8" x2="100" y2="412"/>
+          <line x1="150" y1="8" x2="150" y2="412"/>
+        </g>
+        <g stroke="#2a1810" stroke-width="1.5" stroke-linecap="square">
+          <line x1="8" y1="60" x2="192" y2="60"/>
+          <line x1="8" y1="130" x2="192" y2="130"/>
+          <line x1="8" y1="200" x2="192" y2="200"/>
+          <line x1="8" y1="270" x2="192" y2="270"/>
+          <line x1="8" y1="340" x2="192" y2="340"/>
+        </g>
+        <circle cx="25" cy="210" r="3.5" fill="none" stroke="#c9a24d" stroke-width="1.2"/>
+        <circle cx="25" cy="210" r="1" fill="#c9a24d"/>
+      </svg>
+    </div>
+
+    <!-- 地面陰影 / 門檻 -->
+    <div class="shoji-floor"></div>
   </div>
+
   <div class="door-prompt">
     <p class="door-hint">門內有微光漏出</p>
     <button class="door-btn" id="doorBtn" type="button">
       <span>推開門</span>
-      <span class="door-btn-en">— Push Open —</span>
+      <span class="door-btn-en">— Slide Open —</span>
     </button>
   </div>
 </section>

@@ -440,46 +440,101 @@ button { font-family: inherit; cursor: none; }
 }
 
 /* ===========================================================
-   Scene 4: Door
+   Scene 4: Shoji Door · 障子拉門（水平滑動）
    =========================================================== */
 .scene--door {
-  background: radial-gradient(ellipse at center, var(--forest-deep) 0%, var(--forest-black) 100%);
-  display: flex; align-items: center; justify-content: center;
-}
-.door-bg { position: relative; width: 400px; height: 600px; max-width: 80vw; max-height: 70vh; }
-.door-frame {
-  position: relative;
-  width: 100%; height: 100%;
+  background: radial-gradient(ellipse at center, #15100a 0%, var(--forest-black) 100%);
   display: flex;
-  border: 2px solid rgba(201,162,77,0.4);
-  box-shadow:
-    0 0 60px rgba(201,162,77,0.2),
-    inset 0 0 40px rgba(0,0,0,0.8);
-  background:
-    linear-gradient(to bottom, #2a1d12 0%, #1a1008 100%);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
-.door-left, .door-right {
-  flex: 1;
-  background:
-    repeating-linear-gradient(to bottom,
-      transparent 0, transparent 40px,
-      rgba(0,0,0,0.3) 40px, rgba(0,0,0,0.3) 42px);
-  border-right: 1px solid rgba(0,0,0,0.5);
-  position: relative;
-  transition: transform 2s var(--ease-dramatic);
-}
-.door-right { border-right: none; border-left: 1px solid rgba(0,0,0,0.5); }
-.scene--door.opening .door-left  { transform: perspective(1000px) rotateY(-80deg); }
-.scene--door.opening .door-right { transform: perspective(1000px) rotateY(80deg); }
-.door-glow {
+.door-backdrop {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(245,230,163,0.9) 0%, rgba(245,230,163,0) 60%);
-  opacity: 0;
+  background:
+    radial-gradient(ellipse at 50% 60%, rgba(201,162,77,0.06) 0%, transparent 50%),
+    linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%);
   pointer-events: none;
-  transition: opacity 2s;
 }
-.scene--door.opening .door-glow { opacity: 1; }
+
+/* 障子場景容器 */
+.shoji-scene {
+  position: relative;
+  width: min(640px, 92vw);
+  height: min(580px, 75vh);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 門內光暈 — 先渲染，會從障子和紙透出來 */
+.inner-light {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 55%, rgba(245,230,163,0.4) 0%, rgba(201,162,77,0.15) 30%, transparent 65%),
+    radial-gradient(ellipse at 50% 80%, rgba(201,162,77,0.25) 0%, transparent 40%);
+  opacity: 0.7;
+  animation: innerLightBreath 5s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes innerLightBreath {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.85; }
+}
+.scene--door.opening .inner-light {
+  animation: innerLightBurst 2.2s ease-out forwards;
+}
+@keyframes innerLightBurst {
+  0%   { opacity: 0.7; }
+  50%  { opacity: 1.2; filter: blur(0); }
+  100% { opacity: 1; }
+}
+
+/* 障子面板 */
+.shoji-panel {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  transition: transform 2.4s var(--ease-dramatic);
+}
+.shoji-panel svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter:
+    drop-shadow(0 4px 20px rgba(0,0,0,0.6))
+    drop-shadow(0 0 30px rgba(201,162,77,0.08));
+}
+
+/* hover 時微微外張（預告可推開） */
+.scene--door:not(.opening) .shoji-panel:hover {
+  transform: translateX(var(--hover-nudge, 0));
+}
+.shoji-left:hover  { --hover-nudge: -6px; }
+.shoji-right:hover { --hover-nudge:  6px; }
+
+/* 開門動畫：水平滑動 */
+.scene--door.opening .shoji-left  { transform: translateX(-100%); }
+.scene--door.opening .shoji-right { transform: translateX( 100%); }
+
+/* 地板 / 門檻陰影 */
+.shoji-floor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28%;
+  background:
+    linear-gradient(to top,
+      rgba(0,0,0,0.8) 0%,
+      rgba(0,0,0,0.3) 50%,
+      transparent 100%);
+  pointer-events: none;
+  z-index: 3;
+}
 
 .door-prompt {
   position: absolute;
@@ -684,10 +739,21 @@ button { font-family: inherit; cursor: none; }
   50%      { opacity: 1; transform: scale(1.05); }
 }
 .artifact-icon {
-  font-size: 2.5rem;
   position: relative;
   z-index: 1;
+  width: 52px;
+  height: 52px;
+  color: var(--gold-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.artifact-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.artifact-card:hover .artifact-icon { color: var(--firefly); }
 .artifact-name-zh {
   font-family: var(--serif-zh);
   font-size: 1.2rem;
@@ -814,6 +880,19 @@ button { font-family: inherit; cursor: none; }
   margin-bottom: 1.2rem;
 }
 .scroll-content .scroll-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0.5rem auto 1rem;
+  color: var(--forest-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scroll-content .scroll-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.scroll-content .scroll-icon-text-old {
   font-size: 3.5rem;
   text-align: center;
   margin: 0.5rem 0 1rem;
