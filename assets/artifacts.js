@@ -69,7 +69,7 @@ window.ARTIFACTS = [
     actions: [
       { label: 'Gallery', url: 'https://yazelin.github.io/catime/', primary: true },
       { label: 'Telegram', url: 'https://t.me/catime_yaze' },
-      { label: 'Article', url: 'https://yazelin.github.io/2026-01-30-catime-birth/' },
+      { label: 'Article', url: 'https://yazelin.github.io/ai/2026/01/30/catime-birth.html' },
       { label: 'Source', url: 'https://github.com/yazelin/catime' },
     ],
   },
@@ -85,7 +85,7 @@ window.ARTIFACTS = [
     effect: 'Cloudflare Worker + Vertex AI。自拍 → 3×3 emoji 臉 → FB 可嵌拉霸影片。',
     actions: [
       { label: '試用', url: 'https://yazelin.github.io/emoji-slot-machine/', primary: true },
-      { label: 'Article', url: 'https://yazelin.github.io/2026-04-21-emoji-slot-machine/' },
+      { label: 'Article', url: 'https://yazelin.github.io/ai/2026/04/21/emoji-slot-machine.html' },
       { label: 'Source', url: 'https://github.com/yazelin/emoji-slot-machine' },
     ],
   },
@@ -100,7 +100,7 @@ window.ARTIFACTS = [
     lore: '能自動在多個創造之神之間換手，<br>繪製最切合意念的圖像。若一神拒絕，轉請下一神。',
     effect: 'AI 圖像生成 Agent Skill，支援自動模型 fallback。基於 <a href="https://github.com/yazelin/nanobanana-py" target="_blank" rel="noopener">nanobanana-py</a>（Python 移植自 <a href="https://github.com/doggy8088/nanobanana" target="_blank" rel="noopener">Will 保哥 @doggy8088 的 nanobanana</a>）。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2026-02-09-nanobanana-pro-clawhub-skill/' },
+      { label: 'Article', url: 'https://yazelin.github.io/ai/2026/02/09/nanobanana-pro-clawhub-skill.html' },
       { label: 'Source', url: 'https://github.com/yazelin/nanobanana-pro', primary: true },
       { label: 'Upstream (保哥)', url: 'https://github.com/doggy8088/nanobanana' },
     ],
@@ -116,7 +116,7 @@ window.ARTIFACTS = [
     lore: '讓神靈（Gemini）在此作畫，<br>支援繁體符文、不留神印。',
     effect: 'Gemini AI 圖片生成 CLI + HTTP API。繁中原生、浮水印自動處理。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2026-03-31-gemini-web/' },
+      { label: 'Article', url: 'https://yazelin.github.io/ai/2026/03/31/gemini-web.html' },
       { label: 'Source', url: 'https://github.com/yazelin/gemini-web', primary: true },
     ],
   },
@@ -131,7 +131,7 @@ window.ARTIFACTS = [
     lore: '為繪影魔陣準備咒文草稿的輔助匣。<br>結構化、省去散亂冥想。',
     effect: '結構化 AI 繪圖 prompt 產生器。原始出處 <a href="https://github.com/TanShilongMario/PromptFill" target="_blank" rel="noopener">@TanShilongMario</a>；繁中與諸多改進來自 <a href="https://github.com/doggy8088" target="_blank" rel="noopener">Will 保哥 @doggy8088</a>；由召喚師 × Mori 再補。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2025-12-29-promptfill-intro/' },
+      { label: 'Article', url: 'https://yazelin.github.io/ai/%E5%B7%A5%E5%85%B7/2025/12/29/promptfill-intro.html' },
       { label: 'Source', url: 'https://github.com/yazelin/PromptFill', primary: true },
       { label: 'Upstream (保哥)', url: 'https://github.com/doggy8088/PromptFill' },
     ],
@@ -162,7 +162,7 @@ window.ARTIFACTS = [
     lore: '將墨跡化為幻燈（PPT），<br>可現場投影展示，支援線上宣講模式。',
     effect: 'Markdown → PPT，含投影模式、語法高亮。Fork 自 <a href="https://github.com/eric861129" target="_blank" rel="noopener">@eric861129</a>，由召喚師 × Mori 共同修訂。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2026-01-26-md2ppt-doc-sharetoken/' },
+      { label: 'Article', url: 'https://yazelin.github.io/chingtech%20os/2026/01/26/md2ppt-doc-sharetoken.html' },
       { label: 'Source', url: 'https://github.com/yazelin/MD2PPT-Evolution', primary: true },
       { label: 'Upstream', url: 'https://github.com/eric861129/MD2PPT-Evolution' },
     ],
@@ -178,7 +178,7 @@ window.ARTIFACTS = [
     lore: '個人圖像的次元書架，<br>不佔本空間，存入 GitHub Releases 異界永不損壞。',
     effect: '個人圖床，圖片存放在 GitHub Releases。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2026-02-04-image-bed-github-release/' },
+      { label: 'Article', url: 'https://yazelin.github.io/devops/2026/02/04/image-bed-github-release.html' },
       { label: 'Source', url: 'https://github.com/yazelin/image-bed', primary: true },
     ],
   },
@@ -193,7 +193,7 @@ window.ARTIFACTS = [
     lore: '將漫長的咒文路徑封印為短刻印，<br>單手即可傳送冒險者。',
     effect: 'Cloudflare Workers + KV 縮網址服務。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2025-12-29-cloudflare-workers-shorturl/' },
+      { label: 'Article', url: 'https://yazelin.github.io/serverless/%E6%95%99%E5%AD%B8/2025/12/29/cloudflare-workers-shorturl.html' },
       { label: 'Source', url: 'https://github.com/yazelin/shorturl-worker', primary: true },
     ],
   },
@@ -208,7 +208,7 @@ window.ARTIFACTS = [
     lore: '讓精靈能直接指揮凡人印刷術（CUPS），<br>將任何訊息化為實體。',
     effect: 'MCP server，透過 CUPS 控制印表機。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2026-02-02-printer-mcp-server/' },
+      { label: 'Article', url: 'https://yazelin.github.io/claude%20code/2026/02/02/printer-mcp-server.html' },
       { label: 'Source', url: 'https://github.com/yazelin/printer-mcp', primary: true },
     ],
   },
@@ -223,7 +223,7 @@ window.ARTIFACTS = [
     lore: '讓精靈與商會帳本（ERPNext）直接對話，<br>問帳、記帳不必經過凡人之手。',
     effect: 'MCP server for ERPNext REST API。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2026-02-03-erpnext-mcp-server/' },
+      { label: 'Article', url: 'https://yazelin.github.io/claude%20code/2026/02/03/erpnext-mcp-server.html' },
       { label: 'Source', url: 'https://github.com/yazelin/erpnext-mcp', primary: true },
     ],
   },
@@ -238,7 +238,7 @@ window.ARTIFACTS = [
     lore: '將咒術師的口語即時記下為文字，<br>嵌入 fcitx 輸入法，隨呼隨用。',
     effect: 'ASR 語音輸入法，整合 fcitx framework。',
     actions: [
-      { label: 'Article', url: 'https://yazelin.github.io/2026-02-14-asr-ime-fcitx/' },
+      { label: 'Article', url: 'https://yazelin.github.io/chingtech%20os/2026/02/14/asr-ime-fcitx.html' },
       { label: 'Source', url: 'https://github.com/yazelin/asr-ime-fcitx', primary: true },
     ],
   },
@@ -253,7 +253,7 @@ window.ARTIFACTS = [
     lore: '群體在 LINE 通訊結界中一聲召喚，<br>AI 精靈自動明白你要的是哪道菜。點餐、計帳、看板即時浮現。',
     effect: 'LINE Bot 群組點餐系統：自然語言下單、AI 菜單 OCR、即時看板、prompt injection 防護、三層權限管理、FastAPI + asyncio 全非同步。6 個系列 11 篇文章技術詳解。',
     actions: [
-      { label: '完整系列文章', url: 'https://yazelin.github.io/2025-12-19-jaba-ai-index/', primary: true },
+      { label: '完整系列文章', url: 'https://yazelin.github.io/index/2025/12/19/jaba-ai-index.html', primary: true },
       { label: 'Source', url: 'https://github.com/yazelin/jaba-ai' },
     ],
   },
@@ -270,7 +270,7 @@ window.ARTIFACTS = [
     actions: [
       { label: 'Live Demo', url: 'https://yazelin.github.io/AgentPulse/demo-app/', primary: true },
       { label: 'Landing', url: 'https://yazelin.github.io/AgentPulse/' },
-      { label: 'Article', url: 'https://yazelin.github.io/2026-04-16-agentpulse/' },
+      { label: 'Article', url: 'https://yazelin.github.io/ai/2026/04/16/agentpulse.html' },
       { label: 'Source', url: 'https://github.com/yazelin/AgentPulse' },
     ],
   },

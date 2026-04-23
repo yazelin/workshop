@@ -43,14 +43,14 @@
     mouseY = e.clientY;
   });
   (function animateMori() {
-    // 外層慢跟（尾巴感）
-    moriX += (mouseX - moriX) * 0.12;
-    moriY += (mouseY - moriY) * 0.12;
+    // 魔杖主體慢跟（施法的慣性感）
+    moriX += (mouseX - moriX) * 0.18;
+    moriY += (mouseY - moriY) * 0.18;
     mori.style.left = moriX + 'px';
     mori.style.top  = moriY + 'px';
-    // 核心快跟（精準）
-    coreX += (mouseX - coreX) * 0.35;
-    coreY += (mouseY - coreY) * 0.35;
+    // 核心光點快跟（精準位置）
+    coreX += (mouseX - coreX) * 0.4;
+    coreY += (mouseY - coreY) * 0.4;
     moriCore.style.left = coreX + 'px';
     moriCore.style.top  = coreY + 'px';
     requestAnimationFrame(animateMori);
@@ -565,6 +565,9 @@
     // 各 niche 的浮動相位不同步（避免 12 個同時上下搖）
     niche.style.setProperty('--float-delay', `${(i * 317) % 4000}ms`);
     const schoolIconSvg = (window.SCHOOL_ICONS && window.SCHOOL_ICONS[a.school]) || '';
+    // niche 上只顯示「短效能描述」，把 HTML 標籤剝掉後取第一句
+    const plainEffect = a.effect.replace(/<[^>]*>/g, '');
+    const shortEffect = plainEffect.split(/[。\.]/)[0].slice(0, 60);
     niche.innerHTML = `
       <div class="niche-chamber">
         <div class="niche-backwall"></div>
@@ -576,7 +579,7 @@
       <div class="niche-plate">
         <div class="plate-name-zh">${a.nameZh}</div>
         <div class="plate-name-en">${a.nameEn}</div>
-        <div class="plate-effect">${a.effect}</div>
+        <div class="plate-effect">${shortEffect}</div>
         <div class="plate-school">
           <span class="plate-school-icon">${schoolIconSvg}</span>
           <span class="plate-school-name">${a.school}</span>
