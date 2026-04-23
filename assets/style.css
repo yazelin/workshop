@@ -1056,11 +1056,14 @@ button { font-family: inherit; cursor: none; }
   overflow-x: hidden;
 }
 .char-forest-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
   opacity: 0.5;
+  z-index: 0;
 }
+/* 僅在此 scene 啟用時顯示，避免跟其他 scene 的背景疊加 */
+.scene:not(.active) .char-forest-bg { opacity: 0; }
 
 .char-header {
   position: sticky;
