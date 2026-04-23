@@ -53,7 +53,24 @@ body { position: relative; }
 
 a { color: var(--gold-soft); text-decoration: none; transition: color .2s ease; }
 a:hover { color: var(--parchment); }
-button { font-family: inherit; cursor: none; }
+
+/* 徹底重置 button 避免瀏覽器預設在 :active 時套 OS 按鈕樣式（黑底黑字） */
+button {
+  font-family: inherit;
+  cursor: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 2px;
+}
 
 /* ---------- Mori 精靈游標（魔杖） ---------- */
 .mori-cursor {
@@ -1931,26 +1948,44 @@ button { font-family: inherit; cursor: none; }
   border-color: var(--ink);
 }
 
-/* Modal 裡的連結：羊皮紙背景上，要用深色不能用金色 */
-.scroll-content a,
-.scroll-modal a {
-  color: var(--forest-deep);
+/* Modal 裡的連結：羊皮紙背景（淺色）上，要用深色 */
+/* 高特異度確保覆蓋全域 a:hover */
+.scroll-modal .scroll-content a:not(.scroll-btn),
+.scroll-modal .scroll-lore a,
+.scroll-modal .scroll-effect a,
+.scroll-modal .scroll-deliverable a,
+.scroll-modal p a,
+.scroll-modal .register-lore a,
+.scroll-modal .register-note a,
+.scroll-modal .step-desc a,
+.scroll-modal .step-checklist a,
+.register-step a {
+  color: #1a3d2d;
   text-decoration: none;
-  border-bottom: 1px dotted var(--forest-moss);
+  border-bottom: 1.5px solid rgba(201,162,77,0.6);
   padding-bottom: 1px;
-  transition: color 0.2s, border-color 0.2s;
+  font-weight: 500;
+  transition: all 0.2s;
 }
-.scroll-content a:hover,
-.scroll-modal a:hover {
-  color: var(--gold);
-  border-bottom-color: var(--gold);
+.scroll-modal .scroll-content a:not(.scroll-btn):hover,
+.scroll-modal .scroll-lore a:hover,
+.scroll-modal .scroll-effect a:hover,
+.scroll-modal .scroll-deliverable a:hover,
+.scroll-modal p a:hover,
+.scroll-modal .register-lore a:hover,
+.scroll-modal .register-note a:hover,
+.scroll-modal .step-desc a:hover,
+.scroll-modal .step-checklist a:hover,
+.register-step a:hover {
+  color: #8b5a00;
+  border-bottom-color: #8b5a00;
+  background: rgba(201,162,77,0.15);
+  padding: 1px 3px;
+  margin: 0 -3px;
+  border-radius: 2px;
 }
-/* scroll-btn 是獨立按鈕（非連結樣式），覆寫上述規則 */
+/* scroll-btn 是獨立按鈕（非連結樣式），維持自己的樣式 */
 .scroll-btn {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-.scroll-btn:hover {
   border-bottom: none;
 }
 
