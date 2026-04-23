@@ -1847,11 +1847,12 @@ button:focus-visible {
 }
 @media (max-width: 640px) {
   .title-actions { flex-direction: column; align-items: center; }
-  .tree-row { grid-template-columns: 40px 80px 1fr; }
-  .tree-row .tree-line { height: 40px; }
+  /* 對稱 grid：線在 50% 才會對齊節點中心 */
+  .tree-row { grid-template-columns: 1fr 80px 1fr; }
   .tree-node { width: 80px; height: 80px; }
   .node-ring { inset: 8px; }
   .node-glyph { width: 28px; height: 28px; }
+  /* 手機：所有 label 統一置於右欄（col3），方便閱讀 */
   .tree-row:nth-child(odd) .node-label,
   .tree-row:nth-child(even) .node-label {
     grid-column: 3;
@@ -1860,7 +1861,8 @@ button:focus-visible {
     padding-left: 0.5rem;
     padding-right: 0;
   }
-  .node-label-zh { font-size: 0.95rem; }
+  .node-label-zh { font-size: 0.9rem; }
+  .node-label-en { font-size: 0.7rem; }
 }
 
 .ws-footer {
@@ -2247,6 +2249,37 @@ button:focus-visible {
   margin: 0;
   overflow-x: auto;
   white-space: pre;
+  max-width: 100%;
+}
+
+/* 手機：modal 緊貼視窗寬度 + 指令區塊允許換行 */
+@media (max-width: 640px) {
+  .modal-backdrop { padding: 1rem 0.5rem; }
+  .scroll-modal {
+    padding: 2.2rem 1.2rem 1.8rem;
+    max-width: 100%;
+    max-height: 90vh;
+  }
+  .register-modal { max-width: 100%; }
+  .register-step {
+    grid-template-columns: 36px 1fr;
+    gap: 0.6rem;
+    padding: 0.8rem 0.8rem;
+  }
+  .step-num { font-size: 1.4rem; }
+  .step-title { font-size: 0.95rem; }
+  .step-desc { font-size: 0.78rem; }
+  .step-commands { padding: 0.7rem 0.8rem; }
+  .step-cmd-block {
+    font-size: 0.72rem;
+    /* 強制換行避免撐破 modal */
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-x: visible;
+  }
+  .step-cmd-prompt { font-size: 0.78rem; }
+  .step-checklist li { font-size: 0.78rem; }
+  .step-sublist { padding-left: 0.8rem; }
 }
 .step-cmd-block code {
   font-family: inherit;
