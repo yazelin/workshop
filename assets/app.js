@@ -623,10 +623,18 @@
 
   // ----- Register Modal -----
   const registerBackdrop = document.getElementById('registerBackdrop');
-  document.getElementById('openRegister').addEventListener('click', (e) => {
-    e.preventDefault();
+  // 所有進入「三步引導」modal 的入口集中一個 handler
+  function openRegisterModal(e) {
+    if (e) e.preventDefault();
     registerBackdrop.classList.add('active');
-  });
+  }
+  document.getElementById('openRegister').addEventListener('click', openRegisterModal);
+  const firstTimerLink = document.getElementById('firstTimerLink');
+  if (firstTimerLink) firstTimerLink.addEventListener('click', openRegisterModal);
+  const welcomeCta = document.getElementById('welcomeCta');
+  if (welcomeCta) welcomeCta.addEventListener('click', openRegisterModal);
+  const helpFab = document.getElementById('helpFab');
+  if (helpFab) helpFab.addEventListener('click', openRegisterModal);
   document.getElementById('registerClose').addEventListener('click', closeRegisterModal);
   registerBackdrop.addEventListener('click', (e) => {
     if (e.target === registerBackdrop) closeRegisterModal();

@@ -30,6 +30,14 @@
 <div class="particles" id="particles"></div>
 
 <!-- ============================================================ -->
+<!-- 浮動幫助按鈕（右下角，全 scene 可見）                          -->
+<!-- ============================================================ -->
+<button class="help-fab" id="helpFab" type="button" aria-label="新冒險者入門指引">
+  <span class="help-fab-mark">？</span>
+  <span class="help-fab-label">新冒險者<br>入門</span>
+</button>
+
+<!-- ============================================================ -->
 <!-- 音訊切換（右上角）                                             -->
 <!-- ============================================================ -->
 <button class="audio-toggle" id="audioToggle" aria-label="Toggle ambient audio">
@@ -104,6 +112,11 @@
         <span class="enter-btn-en">— Summoner Profile —</span>
       </button>
     </div>
+
+    <button class="first-timer-link" id="firstTimerLink" type="button">
+      <span class="first-timer-zh">新來的冒險者？點此開始你自己的旅程</span>
+      <span class="first-timer-en">— First time here? Start your own journey →</span>
+    </button>
 
     <div class="title-footer">
       <span class="meta-lv">Summoner · Lv. ??</span>
@@ -337,6 +350,23 @@
       <span class="ink-gold">魔道具</span>就放在工坊各處。<br>
       靠近觀察，點取即可查閱其典故與效能。
     </p>
+  </div>
+
+  <!-- 歡迎訪客 banner：告訴他們這是誰的工坊 + 怎麼開始自己的 -->
+  <div class="ws-welcome">
+    <div class="ws-welcome-inner">
+      <div class="ws-welcome-left">
+        <div class="ws-welcome-heading">這是 <span class="ink-gold">Yaze（林）</span> 的工坊</div>
+        <div class="ws-welcome-body">
+          以下 12 件魔道具，是他與契約精靈 <span class="ink-gold">Mori（森）</span> 共創的作品。<br>
+          森林不屬於任何人 — 你也可以召喚屬於你的精靈、打造屬於你的工坊。
+        </div>
+      </div>
+      <button class="ws-welcome-cta" id="welcomeCta" type="button">
+        <span>開 始 你 的 儀 式</span>
+        <span class="ws-welcome-cta-en">— Start Your Own →</span>
+      </button>
+    </div>
   </div>
 
   <!-- 魔道具格網 -->
