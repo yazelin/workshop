@@ -741,19 +741,32 @@ button { font-family: inherit; cursor: none; }
 .artifact-icon {
   position: relative;
   z-index: 1;
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   color: var(--gold-soft);
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0.85;
+  transition: all 0.4s var(--ease-soft);
+  filter: drop-shadow(0 0 6px rgba(201,162,77,0.2));
 }
 .artifact-icon svg {
   width: 100%;
   height: 100%;
   display: block;
 }
-.artifact-card:hover .artifact-icon { color: var(--firefly); }
+.artifact-card:hover .artifact-icon {
+  color: var(--firefly);
+  opacity: 1;
+  filter: drop-shadow(0 0 12px rgba(245,230,163,0.4));
+  transform: scale(1.06);
+}
+.scroll-content .scroll-icon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 8px rgba(26,20,16,0.2));
+}
 .artifact-name-zh {
   font-family: var(--serif-zh);
   font-size: 1.2rem;

@@ -82,89 +82,81 @@
   for (let i = 0; i < 14; i++) setTimeout(spawnParticle, i * 600);
   setInterval(spawnParticle, 1800);
 
-  // ----- 環境音（Web Audio API 生成 drone） -----
-  let audioCtx, masterGain, droneNodes = [], shimmerTimer;
+  // ----- 環境音（CC0 ambient loop） -----
+  // 來源：OpenGameArt.org "Cathedral in the forest" (CC0, Public Domain)
+  // 用 Web Audio API 的 AudioBufferSourceNode 達到無縫循環（比 <audio loop> 更乾淨）
+  const AMBIENT_URL = 'assets/audio/forest-ambient.ogg';
+  let audioCtx, ambientSource, ambientGain, ambientBuffer;
   let audioOn = false;
   const audioToggle = document.getElementById('audioToggle');
   const iconOn  = audioToggle.querySelector('.audio-icon--on');
   const iconOff = audioToggle.querySelector('.audio-icon--off');
 
+  async function ensureAudioCtx() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      console.log('[audio] context created, state =', audioCtx.state);
+    }
+    if (audioCtx.state === 'suspended') {
+      await audioCtx.resume();
+      console.log('[audio] resumed, state =', audioCtx.state);
+    }
+    return audioCtx;
+  }
+
+  async function loadAmbientBuffer() {
+    if (ambientBuffer) return ambientBuffer;
+    console.log('[audio] fetching', AMBIENT_URL);
+    const resp = await fetch(AMBIENT_URL);
+    if (!resp.ok) throw new Error('fetch failed: ' + resp.status);
+    const arrayBuffer = await resp.arrayBuffer();
+    console.log('[audio] decoding', arrayBuffer.byteLength, 'bytes');
+    ambientBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    console.log('[audio] decoded', ambientBuffer.duration.toFixed(1), 'sec');
+    return ambientBuffer;
+  }
+
   async function startAmbient() {
     try {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        console.log('[audio] context created, state =', audioCtx.state);
-      }
+      await ensureAudioCtx();
+      const buffer = await loadAmbientBuffer();
 
-      // Chrome/Firefox 要求在 user gesture 內明確 resume
-      if (audioCtx.state === 'suspended') {
-        await audioCtx.resume();
-        console.log('[audio] resumed, state =', audioCtx.state);
-      }
+      // 若已在播，跳過
+      if (ambientSource) return;
 
-      // 若已有 drones，不重新建立
-      if (droneNodes.length > 0) return;
+      ambientGain = audioCtx.createGain();
+      ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      // 4 秒 ease-in 淡入到 0.5（森林環境音需要有存在感）
+      ambientGain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 4);
+      ambientGain.connect(audioCtx.destination);
 
-      masterGain = audioCtx.createGain();
-      masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-      // 3 秒內淡入到可聽但輕柔的音量（0.15 比原本 0.04 大 4 倍）
-      masterGain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 3);
-      masterGain.connect(audioCtx.destination);
+      ambientSource = audioCtx.createBufferSource();
+      ambientSource.buffer = buffer;
+      ambientSource.loop = true;
+      ambientSource.connect(ambientGain);
+      ambientSource.start();
 
-      // 三個 sine 低頻（55Hz 低 A、82.4Hz E、110Hz A），略高一個八度讓桌面喇叭聽得到
-      [110, 164.8, 220].forEach((freq, i) => {
-        const osc = audioCtx.createOscillator();
-        const lfo = audioCtx.createOscillator();
-        const lfoGain = audioCtx.createGain();
-        const gain = audioCtx.createGain();
-        osc.frequency.value = freq;
-        osc.type = 'sine';
-        lfo.frequency.value = 0.08 + i * 0.03;
-        lfoGain.gain.value = 2 + i * 0.5;
-        gain.gain.value = 0.4 - i * 0.08;
-        lfo.connect(lfoGain);
-        lfoGain.connect(osc.frequency);
-        osc.connect(gain);
-        gain.connect(masterGain);
-        osc.start();
-        lfo.start();
-        droneNodes.push({ osc, lfo, gain });
-      });
-
-      // 高頻 shimmer（偶爾出現，提高音量讓真的聽得到）
-      shimmerTimer = setInterval(() => {
-        if (!audioOn || !audioCtx || audioCtx.state !== 'running') return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = 880 + Math.random() * 600;
-        const now = audioCtx.currentTime;
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.08, now + 0.8);
-        gain.gain.linearRampToValueAtTime(0, now + 3.5);
-        osc.connect(gain);
-        gain.connect(masterGain);
-        osc.start(now);
-        osc.stop(now + 3.5);
-      }, 7000);
-
-      console.log('[audio] ambient started, ' + droneNodes.length + ' drones');
+      console.log('[audio] forest ambient playing');
     } catch (e) {
       console.error('[audio] failed to start:', e);
-      alert('音訊啟動失敗：' + e.message);
+      alert('音訊啟動失敗：' + e.message + '\n\n打開 F12 Console 看詳細訊息。');
+      audioOn = false;
+      iconOn.style.display  = 'none';
+      iconOff.style.display = 'block';
+      audioToggle.classList.remove('active');
     }
   }
 
   function stopAmbient() {
-    if (shimmerTimer) { clearInterval(shimmerTimer); shimmerTimer = null; }
-    if (masterGain && audioCtx) {
-      // 1 秒淡出後停止 oscillators
-      masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
+    if (ambientGain && audioCtx) {
+      // 1.5 秒淡出
+      ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5);
     }
     setTimeout(() => {
-      droneNodes.forEach(n => { try { n.osc.stop(); n.lfo.stop(); } catch(e){} });
-      droneNodes = [];
-    }, 1100);
+      try { ambientSource && ambientSource.stop(); } catch(e) {}
+      ambientSource = null;
+      ambientGain = null;
+    }, 1700);
   }
 
   audioToggle.addEventListener('click', () => {
