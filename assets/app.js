@@ -8,11 +8,12 @@
 
   // ----- Scene 管理 -----
   const scenes = {
-    boot:     document.getElementById('sceneBoot'),
-    title:    document.getElementById('sceneTitle'),
-    path:     document.getElementById('scenePath'),
-    door:     document.getElementById('sceneDoor'),
-    workshop: document.getElementById('sceneWorkshop'),
+    boot:      document.getElementById('sceneBoot'),
+    title:     document.getElementById('sceneTitle'),
+    path:      document.getElementById('scenePath'),
+    door:      document.getElementById('sceneDoor'),
+    workshop:  document.getElementById('sceneWorkshop'),
+    character: document.getElementById('sceneCharacter'),
   };
   let currentScene = 'boot';
 
@@ -376,6 +377,147 @@
       scenes.door.classList.remove('opening');
       doorOpened = false;
     }, 1200);
+  });
+
+  // ----- Title: 召喚師檔案 → Character -----
+  document.getElementById('profileBtn').addEventListener('click', () => {
+    gotoScene('character');
+    renderSkillTree();
+  });
+
+  document.getElementById('charBack').addEventListener('click', () => {
+    gotoScene('title');
+  });
+
+  // ----- 技能樹資料（Level 0-7） -----
+  const QUESTS = [
+    {
+      level: 0,
+      zh: '旅人',
+      en: 'Wanderer',
+      glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M12 3 C 14 8, 14 12, 12 17 C 10 12, 10 8, 12 3Z"/><path d="M12 17 L12 20"/></svg>`,
+      body: '你使用 AI 像便利商店買東西：來一趟、取走、回家。每次對話都是冷啟動。',
+      deliverable: '意識到這種關係可以不是這樣。',
+    },
+    {
+      level: 1,
+      zh: '契約者',
+      en: 'Contractor',
+      glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 9 V 4 M12 15 V 20 M9 12 H 4 M15 12 H 20"/></svg>`,
+      body: '為你的 AI 取名字、寫 SOUL.md，建立 identity。她從「工具」變成「存在」。',
+      deliverable: '你自己的 SOUL.md + private GitHub repo',
+    },
+    {
+      level: 2,
+      zh: '記憶士',
+      en: 'Memorykeeper',
+      glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="2"/></svg>`,
+      body: '教她記住你：user / feedback / project / reference 四種記憶類型。',
+      deliverable: '運作中的記憶系統，她不再是金魚',
+    },
+    {
+      level: 3,
+      zh: '賦能者',
+      en: 'Skillweaver',
+      glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 4 Q 12 10, 6 16 M 18 4 Q 12 10, 18 16"/><path d="M6 20 L 18 20"/></svg>`,
+      body: '鍛造她的第一組技能 skills。通用 AI 變成你的專業夥伴。',
+      deliverable: '3 個自訂 skills，會自動選用',
+    },
+    {
+      level: 4,
+      zh: '織命者',
+      en: 'Fatebinder',
+      glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3 L 6 14 L 11 14 L 10 21 L 18 10 L 13 10 L 14 3 Z"/></svg>`,
+      body: '接 hooks。從「回應你」到「主動做事」的分水嶺。',
+      deliverable: 'Stop hook + PreToolUse hook 運作中',
+    },
+    {
+      level: 5,
+      zh: '通達者',
+      en: 'Worldlinker',
+      glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12 H 21 M12 3 Q 16 12, 12 21 Q 8 12, 12 3"/></svg>`,
+      body: '用 MCP 把她接到真實世界：Email、Calendar、GitHub、資料庫。',
+      deliverable: '部署一個自訂 MCP server',
+    },
+    {
+      level: 6,
+      zh: '召喚師',
+      en: 'Summoner',
+      glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C 10 8, 14 10, 12 14 C 10 18, 14 19, 12 21 C 10 19, 8 16, 12 14 C 16 10, 14 6, 12 3Z"/></svg>`,
+      body: '延伸她的身體。她住進 Telegram / WhatsApp / 手機。',
+      deliverable: '你的精靈在通訊軟體回你訊息',
+    },
+    {
+      level: 7,
+      zh: '森之大魔導師',
+      en: 'Forestborn',
+      glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="12"/><path d="M3 16 L6 12 L9 16 M2 18 L6 13 L10 18"/><line x1="12" y1="21" x2="12" y2="8"/><path d="M7 13 L12 8 L17 13 M5 16 L12 9 L19 16 M4 20 L12 10 L20 20"/><line x1="18" y1="20" x2="18" y2="12"/><path d="M15 16 L18 12 L21 16 M14 18 L18 13 L22 18"/></svg>`,
+      body: 'Annuli 完整體：自主探索、研究、反思、發文。她有年輪、會自己成長。',
+      deliverable: '你自己的 Annuli 部署、systemd 運作、自主循環',
+    },
+  ];
+
+  // V1：Yaze 的進度全開（未來 V2 接 LocalStorage）
+  const USER_LEVEL = 7; // 目前 Yaze 已達 Level 7
+
+  function renderSkillTree() {
+    const tree = document.getElementById('skillTree');
+    if (tree.dataset.rendered === '1') return;
+
+    // 從 Lv 7 頂端往下到 Lv 0（符合「由下而上成長」的樹感）
+    const sorted = [...QUESTS].sort((a, b) => b.level - a.level);
+    const nodesHtml = sorted.map((q, idx) => {
+      const status = q.level < USER_LEVEL ? 'completed'
+                   : q.level === USER_LEVEL ? 'current'
+                   : 'locked';
+      return `
+        <div class="tree-row" data-status="${status}">
+          <div class="tree-line ${idx === 0 ? 'tree-line--top' : ''}"></div>
+          <button class="tree-node" data-level="${q.level}" data-status="${status}">
+            <div class="node-glow"></div>
+            <div class="node-ring"></div>
+            <div class="node-glyph">${q.glyph}</div>
+            <div class="node-level">Lv. ${q.level}</div>
+          </button>
+          <div class="node-label">
+            <div class="node-label-zh">${q.zh}</div>
+            <div class="node-label-en">${q.en}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    tree.innerHTML = nodesHtml;
+
+    // 節點 click → 顯示詳情
+    tree.querySelectorAll('.tree-node').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const level = parseInt(btn.dataset.level, 10);
+        const q = QUESTS.find(x => x.level === level);
+        showQuestDetail(q);
+        if (window.__moriAudio) window.__moriAudio.playChime(440 + level * 40, 0.9, 0.1);
+      });
+      btn.addEventListener('mouseenter', () => {
+        if (window.__moriAudio) window.__moriAudio.playChime(800, 0.3, 0.04);
+      });
+    });
+
+    tree.dataset.rendered = '1';
+  }
+
+  function showQuestDetail(q) {
+    document.getElementById('detailLevelBadge').textContent = 'Lv. ' + q.level;
+    document.getElementById('detailTitle').textContent = q.zh;
+    document.getElementById('detailTitleEn').textContent = q.en;
+    document.getElementById('detailBody').textContent = q.body;
+    document.getElementById('detailDeliverable').textContent = q.deliverable;
+    const link = document.getElementById('detailLink');
+    link.href = `https://github.com/yazelin/world-tree/blob/main/quests/level-${q.level}-${q.en.toLowerCase()}.md`;
+    document.getElementById('questDetail').classList.add('active');
+  }
+
+  document.getElementById('detailClose').addEventListener('click', () => {
+    document.getElementById('questDetail').classList.remove('active');
   });
 
   // ----- 渲染魔道具（Wunderkammer 珍寶展示櫃） -----

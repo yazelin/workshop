@@ -1001,6 +1001,478 @@ button { font-family: inherit; cursor: none; }
   filter: drop-shadow(0 2px 8px rgba(26,20,16,0.2));
 }
 
+/* ===========================================================
+   Title Actions（兩個按鈕並列）
+   =========================================================== */
+.title-actions {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 2s var(--ease-soft) 3.2s forwards;
+}
+.title-actions .enter-btn,
+.title-actions .profile-btn {
+  animation: none;  /* 由父容器統一淡入 */
+  opacity: 1;
+}
+.profile-btn {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.2rem 2.5rem;
+  background: transparent;
+  border: 1px solid rgba(201,162,77,0.5);
+  color: var(--parchment);
+  font-family: var(--serif-zh);
+  letter-spacing: 0.3em;
+  font-size: 0.92rem;
+  transition: all 0.4s var(--ease-soft);
+  overflow: hidden;
+}
+.profile-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(107,138,153,0.2) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.profile-btn:hover::before { opacity: 1; }
+.profile-btn:hover {
+  border-color: var(--mist-blue);
+  color: var(--gold-soft);
+  letter-spacing: 0.4em;
+}
+
+/* ===========================================================
+   Character Scene · 召喚師檔案
+   =========================================================== */
+.scene--character {
+  background: linear-gradient(to bottom, var(--forest-deep) 0%, var(--forest-black) 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.char-forest-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.char-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+  background: rgba(10,14,12,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,162,77,0.15);
+}
+.char-back {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--gold-soft);
+  font-family: var(--serif-zh);
+  letter-spacing: 0.15em;
+  font-size: 0.85rem;
+}
+.char-back:hover { color: var(--parchment); }
+.char-title-zh {
+  font-family: var(--serif-zh);
+  font-size: 1.1rem;
+  letter-spacing: 0.5em;
+  color: var(--parchment);
+  padding-left: 0.5em;
+  text-align: center;
+}
+.char-title-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-soft);
+  text-align: center;
+}
+.char-header-spacer { width: 120px; }
+
+.char-layout {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 280px 1fr 320px;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100% - 70px);
+}
+
+/* 召喚師卡（左欄） */
+.char-card {
+  align-self: start;
+  background: linear-gradient(to bottom, rgba(30,44,36,0.6) 0%, rgba(10,14,12,0.8) 100%);
+  border: 1px solid rgba(201,162,77,0.25);
+  border-radius: 3px;
+  padding: 2rem 1.5rem;
+  position: sticky;
+  top: 90px;
+}
+.char-avatar-frame {
+  width: 80px; height: 80px;
+  margin: 0 auto 1rem;
+  color: var(--gold-soft);
+  filter: drop-shadow(0 0 15px rgba(201,162,77,0.3));
+}
+.char-avatar-crest { width: 100%; height: 100%; }
+.char-name-zh {
+  font-family: var(--serif-zh);
+  font-size: 1.3rem;
+  letter-spacing: 0.2em;
+  color: var(--parchment);
+  text-align: center;
+  font-weight: 500;
+}
+.char-name-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--gold-soft);
+  text-align: center;
+  margin-top: 0.3rem;
+}
+.char-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201,162,77,0.4), transparent);
+  margin: 1.2rem 0;
+}
+.char-stats { font-family: var(--serif-zh); font-size: 0.8rem; }
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.45rem 0;
+  color: var(--parchment);
+  opacity: 0.9;
+}
+.stat-label {
+  color: var(--mist-blue);
+  letter-spacing: 0.2em;
+  font-size: 0.72rem;
+}
+.stat-value {
+  color: var(--parchment);
+  letter-spacing: 0.05em;
+}
+.char-hint {
+  font-family: var(--serif-it);
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--gold-soft);
+  opacity: 0.7;
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* 技能樹（中欄） */
+.skill-tree-wrap {
+  position: relative;
+  padding: 1rem 0 2rem;
+}
+.skill-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  min-height: 100%;
+}
+.tree-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+}
+.tree-row .tree-line {
+  grid-column: 2;
+  justify-self: center;
+  width: 2px;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(201,162,77,0.5) 0%, rgba(201,162,77,0.15) 100%);
+  position: relative;
+}
+.tree-row .tree-line--top { display: none; }
+.tree-row .tree-line::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--firefly));
+  opacity: 0;
+  animation: treePulse 4s ease-in-out infinite;
+}
+@keyframes treePulse {
+  0%, 100% { opacity: 0; transform: translateY(-100%); }
+  50%      { opacity: 0.6; transform: translateY(100%); }
+}
+
+.tree-node {
+  grid-column: 2;
+  justify-self: center;
+  position: relative;
+  width: 96px; height: 96px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.node-glow {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,162,77,0.35) 0%, transparent 65%);
+  filter: blur(10px);
+  animation: nodeGlowPulse 4s ease-in-out infinite;
+}
+@keyframes nodeGlowPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.08); }
+}
+.node-ring {
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-soft);
+  background:
+    radial-gradient(circle at 40% 35%, rgba(245,230,163,0.2) 0%, transparent 60%),
+    radial-gradient(circle, #1a1410 0%, #08050a 100%);
+  box-shadow:
+    inset 0 0 12px rgba(0,0,0,0.8),
+    0 4px 12px rgba(0,0,0,0.6);
+  transition: all 0.3s var(--ease-soft);
+}
+.node-glyph {
+  position: relative;
+  z-index: 2;
+  width: 36px; height: 36px;
+  color: var(--gold-soft);
+  transition: all 0.3s var(--ease-soft);
+}
+.node-glyph svg { width: 100%; height: 100%; }
+.node-level {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, #5c4421 0%, #3a2a13 100%);
+  color: #f2e6c6;
+  font-family: var(--serif-en);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  border: 1px solid rgba(201,162,77,0.5);
+  z-index: 3;
+  white-space: nowrap;
+}
+
+.tree-node:hover .node-ring {
+  border-color: var(--firefly);
+  background:
+    radial-gradient(circle at 40% 35%, rgba(245,230,163,0.4) 0%, transparent 60%),
+    radial-gradient(circle, #1d1810 0%, #0a060a 100%);
+}
+.tree-node:hover .node-glyph {
+  color: var(--firefly);
+  transform: scale(1.1);
+}
+
+/* 狀態：current（當前階級） */
+[data-status="current"] .node-ring {
+  border-color: var(--firefly);
+  animation: currentPulse 2s ease-in-out infinite;
+}
+[data-status="current"] .node-glyph { color: var(--firefly); }
+[data-status="current"] .node-glow {
+  background: radial-gradient(circle, rgba(245,230,163,0.6) 0%, transparent 65%);
+}
+@keyframes currentPulse {
+  0%, 100% { box-shadow: inset 0 0 12px rgba(0,0,0,0.8), 0 0 20px rgba(245,230,163,0.4); }
+  50%      { box-shadow: inset 0 0 12px rgba(0,0,0,0.8), 0 0 40px rgba(245,230,163,0.7); }
+}
+
+/* 狀態：locked（未達成） */
+[data-status="locked"] .node-ring {
+  border-color: rgba(201,162,77,0.25);
+  background:
+    radial-gradient(circle, #0a0604 0%, #030203 100%);
+}
+[data-status="locked"] .node-glyph { color: rgba(201,162,77,0.3); }
+[data-status="locked"] .node-glow { opacity: 0.2; }
+
+/* 節點右側標籤（奇數列居左，偶數列居右 — 視覺對稱） */
+.tree-row:nth-child(even) .node-label { grid-column: 3; justify-self: start; text-align: left; padding-left: 1rem; }
+.tree-row:nth-child(odd) .node-label  { grid-column: 1; justify-self: end;   text-align: right; padding-right: 1rem; }
+.node-label-zh {
+  font-family: var(--serif-zh);
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  color: var(--parchment);
+  margin-bottom: 0.15rem;
+}
+.node-label-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-soft);
+}
+[data-status="locked"] .node-label-zh { color: rgba(232,220,192,0.4); }
+[data-status="locked"] .node-label-en { color: rgba(201,162,77,0.3); }
+
+/* 任務詳情（右欄，sticky） */
+.quest-detail {
+  align-self: start;
+  position: sticky;
+  top: 90px;
+  background:
+    radial-gradient(ellipse at top, rgba(201,162,77,0.18) 0%, transparent 60%),
+    linear-gradient(to bottom, #efe3c7 0%, #d4c598 100%);
+  color: var(--ink);
+  border: 1px solid var(--parchment-dark);
+  border-radius: 2px;
+  padding: 2rem 1.5rem 1.8rem;
+  box-shadow:
+    0 8px 30px rgba(0,0,0,0.5),
+    0 0 60px rgba(201,162,77,0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(16px);
+  transition: all 0.5s var(--ease-soft);
+}
+.quest-detail.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+.detail-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  width: 28px; height: 28px;
+  background: transparent;
+  border: 1px solid rgba(26,20,16,0.25);
+  border-radius: 50%;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1;
+}
+.detail-close:hover { background: rgba(26,20,16,0.08); }
+.detail-level-badge {
+  display: inline-block;
+  font-family: var(--serif-en);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--gold);
+  background: rgba(201,162,77,0.1);
+  margin-bottom: 1rem;
+}
+.detail-title {
+  font-family: var(--serif-zh);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+.detail-title-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-bottom: 1rem;
+}
+.detail-divider {
+  height: 1px;
+  background: var(--parchment-dark);
+  margin-bottom: 1rem;
+}
+.detail-section-label {
+  font-family: var(--serif-en);
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+  margin-top: 1rem;
+}
+.detail-section-label:first-of-type { margin-top: 0; }
+.detail-body,
+.detail-deliverable {
+  font-family: var(--serif-zh);
+  font-size: 0.88rem;
+  line-height: 1.85;
+  color: var(--ink);
+}
+.detail-deliverable { color: var(--ink-soft); font-style: italic; }
+.detail-link {
+  display: block;
+  margin-top: 1.5rem;
+  padding: 0.6rem;
+  text-align: center;
+  background: var(--forest-deep);
+  color: var(--gold-soft);
+  border: 1px solid var(--forest-deep);
+  font-family: var(--serif-en);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.detail-link:hover { background: var(--forest-mid); color: var(--parchment); text-decoration: none; }
+
+/* RWD */
+@media (max-width: 960px) {
+  .char-layout {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  .char-card { position: static; }
+  .quest-detail { position: static; }
+  .tree-row { grid-template-columns: 1fr 100px 1fr; }
+}
+@media (max-width: 640px) {
+  .title-actions { flex-direction: column; align-items: center; }
+  .tree-row { grid-template-columns: 40px 80px 1fr; }
+  .tree-row .tree-line { height: 40px; }
+  .tree-node { width: 80px; height: 80px; }
+  .node-ring { inset: 8px; }
+  .node-glyph { width: 28px; height: 28px; }
+  .tree-row:nth-child(odd) .node-label,
+  .tree-row:nth-child(even) .node-label {
+    grid-column: 3;
+    justify-self: start;
+    text-align: left;
+    padding-left: 0.5rem;
+    padding-right: 0;
+  }
+  .node-label-zh { font-size: 0.95rem; }
+}
+
 .ws-footer {
   padding: 2rem;
   text-align: center;
@@ -1201,16 +1673,19 @@ button { font-family: inherit; cursor: none; }
 }
 
 /* ===========================================================
-   Register Modal
+   Start Your Journey Modal
    =========================================================== */
-.register-modal { text-align: center; }
-.register-crest {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.register-modal { text-align: center; max-width: 620px; }
+.register-crest-svg {
+  margin: 0 auto 1rem;
+  color: var(--gold);
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(201,162,77,0.3));
 }
 .register-title {
   font-family: var(--serif-zh);
-  font-size: 1.6rem;
+  font-size: 1.5rem;
+  font-weight: 600;
   letter-spacing: 0.3em;
   color: var(--ink);
   margin-bottom: 1rem;
@@ -1222,47 +1697,115 @@ button { font-family: inherit; cursor: none; }
   color: var(--ink-soft);
   margin-bottom: 2rem;
 }
-.register-form {
+.register-steps {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  max-width: 360px;
+  gap: 1rem;
   margin: 0 auto 1.5rem;
+  text-align: left;
 }
-.register-input {
-  padding: 0.8rem 1rem;
-  background: rgba(255,255,255,0.4);
+.register-step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: rgba(255,255,255,0.3);
   border: 1px solid var(--parchment-dark);
+  border-left: 3px solid var(--gold);
   border-radius: 2px;
-  color: var(--ink);
+}
+.step-num {
   font-family: var(--serif-zh);
-  font-size: 0.95rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--gold);
+  text-align: center;
+  line-height: 1;
+  padding-top: 0.3rem;
 }
-.register-input:focus {
-  outline: none;
-  border-color: var(--gold);
-  background: rgba(255,255,255,0.7);
+.step-title {
+  font-family: var(--serif-zh);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
 }
-.register-submit {
-  padding: 0.9rem;
-  background: var(--forest-deep);
-  color: var(--gold-soft);
-  border: 1px solid var(--forest-deep);
+.step-desc {
+  font-family: var(--serif-zh);
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin-bottom: 0.5rem;
+}
+.step-link {
+  font-family: var(--serif-en);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--forest-deep);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--forest-moss);
+}
+.step-link:hover { color: var(--gold); text-decoration: none; }
+.register-note {
+  font-family: var(--serif-it);
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  opacity: 0.7;
+  line-height: 1.8;
+}
+
+/* ===========================================================
+   Workshop big CTA + journey footer
+   =========================================================== */
+.ws-journey-cta {
+  padding: 2.5rem 1rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(201,162,77,0.15);
+  margin-top: 2rem;
+}
+.ws-big-cta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.2rem 3rem;
+  margin-top: 1.5rem;
+  background: transparent;
+  border: 1px solid var(--gold-soft);
+  color: var(--parchment);
   font-family: var(--serif-zh);
   letter-spacing: 0.3em;
-  font-size: 0.9rem;
-  transition: all 0.2s;
+  font-size: 0.95rem;
+  transition: all 0.4s var(--ease-soft);
+  position: relative;
+  overflow: hidden;
 }
-.register-submit:hover {
-  background: var(--forest-mid);
-  color: var(--parchment);
+.ws-big-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(201,162,77,0.25) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
-.register-note {
+.ws-big-cta:hover::before { opacity: 1; }
+.ws-big-cta:hover {
+  border-color: var(--gold);
+  color: var(--gold-soft);
+  letter-spacing: 0.4em;
+}
+.cta-zh { position: relative; z-index: 2; }
+.cta-en {
   font-family: var(--serif-en);
   font-style: italic;
-  font-size: 0.75rem;
-  color: var(--ink-soft);
-  opacity: 0.6;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-soft);
+  opacity: 0.8;
+  position: relative;
+  z-index: 2;
 }
 
 /* ===========================================================

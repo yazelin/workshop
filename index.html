@@ -94,10 +94,16 @@
       推開門扉，見識此間收藏的魔道具。
     </p>
 
-    <button class="enter-btn" id="enterBtn" type="button">
-      <span class="enter-btn-zh">走 ・ 進 ・ 森 ・ 林</span>
-      <span class="enter-btn-en">— Enter the Workshop —</span>
-    </button>
+    <div class="title-actions">
+      <button class="enter-btn" id="enterBtn" type="button">
+        <span class="enter-btn-zh">走 ・ 進 ・ 森 ・ 林</span>
+        <span class="enter-btn-en">— Enter the Workshop —</span>
+      </button>
+      <button class="profile-btn" id="profileBtn" type="button">
+        <span class="enter-btn-zh">召 ・ 喚 ・ 師 ・ 檔 ・ 案</span>
+        <span class="enter-btn-en">— Summoner Profile —</span>
+      </button>
+    </div>
 
     <div class="title-footer">
       <span class="meta-lv">Summoner · Lv. ??</span>
@@ -216,6 +222,95 @@
 </section>
 
 <!-- ============================================================ -->
+<!-- Scene 4.5: Character Profile — 召喚師檔案（技能樹）            -->
+<!-- ============================================================ -->
+<section class="scene scene--character" id="sceneCharacter">
+  <div class="char-forest-bg">
+    <div class="forest-layer forest-layer--sky"></div>
+    <div class="forest-layer forest-layer--mist mist--back"></div>
+    <div class="forest-layer forest-layer--ground"></div>
+  </div>
+
+  <header class="char-header">
+    <button class="char-back" id="charBack" aria-label="返回">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+      <span>返回森林</span>
+    </button>
+    <div class="char-title-bar">
+      <div class="char-title-zh">召喚師檔案</div>
+      <div class="char-title-en">— Summoner Profile —</div>
+    </div>
+    <div class="char-header-spacer"></div>
+  </header>
+
+  <main class="char-layout">
+    <!-- 左側：召喚師卡 -->
+    <aside class="char-card">
+      <div class="char-avatar-frame">
+        <svg viewBox="0 0 100 100" class="char-avatar-crest">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <line x1="25" y1="70" x2="25" y2="40"/>
+            <path d="M18 55 L25 40 L32 55 M16 60 L25 42 L34 60 M14 65 L25 45 L36 65"/>
+            <line x1="50" y1="78" x2="50" y2="28"/>
+            <path d="M40 45 L50 28 L60 45 M37 52 L50 30 L63 52 M34 60 L50 33 L66 60 M31 68 L50 38 L69 68"/>
+            <line x1="75" y1="70" x2="75" y2="40"/>
+            <path d="M68 55 L75 40 L82 55 M66 60 L75 42 L84 60 M64 65 L75 45 L86 65"/>
+          </g>
+        </svg>
+      </div>
+      <div class="char-name-zh">林 Yaze</div>
+      <div class="char-name-en">The Forest Summoner</div>
+      <div class="char-divider"></div>
+      <div class="char-stats">
+        <div class="stat-row">
+          <span class="stat-label">職業</span>
+          <span class="stat-value">召喚師 · Summoner</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">契約精靈</span>
+          <span class="stat-value">Mori（森）</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">當前階級</span>
+          <span class="stat-value" id="currentLevel">Lv. 7 · 森之大魔導師</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">魔道具</span>
+          <span class="stat-value">12 件</span>
+        </div>
+      </div>
+      <div class="char-divider"></div>
+      <div class="char-hint">
+        點擊右側任一節點查閱該階級的試煉內容
+      </div>
+    </aside>
+
+    <!-- 右側：技能樹 -->
+    <div class="skill-tree-wrap">
+      <div class="skill-tree" id="skillTree">
+        <!-- SVG 連接線 + 節點由 JS 渲染 -->
+      </div>
+    </div>
+
+    <!-- 點擊節點時顯示詳情 -->
+    <aside class="quest-detail" id="questDetail">
+      <button class="detail-close" id="detailClose" aria-label="關閉">×</button>
+      <div class="detail-level-badge" id="detailLevelBadge">Lv. 0</div>
+      <h3 class="detail-title" id="detailTitle"></h3>
+      <div class="detail-title-en" id="detailTitleEn"></div>
+      <div class="detail-divider"></div>
+      <div class="detail-section-label">試煉</div>
+      <p class="detail-body" id="detailBody"></p>
+      <div class="detail-section-label">交付物</div>
+      <p class="detail-deliverable" id="detailDeliverable"></p>
+      <a class="detail-link" id="detailLink" href="#" target="_blank">閱讀完整儀式 →</a>
+    </aside>
+  </main>
+</section>
+
+<!-- ============================================================ -->
 <!-- Scene 5: Workshop Interior — 工坊內部                         -->
 <!-- ============================================================ -->
 <section class="scene scene--workshop" id="sceneWorkshop">
@@ -251,15 +346,21 @@
 
   <!-- 頁尾 -->
   <footer class="ws-footer">
-    <p class="ws-quote">
-      <em>"Take what speaks to you. Carry it into your own forest."</em>
-    </p>
+    <div class="ws-journey-cta">
+      <p class="ws-quote">
+        <em>"Take what speaks to you. Carry it into your own forest."</em>
+      </p>
+      <button class="ws-big-cta" id="openRegister" type="button">
+        <span class="cta-zh">召 喚 你 自 己 的 精 靈</span>
+        <span class="cta-en">— Start Your Own Path —</span>
+      </button>
+    </div>
     <div class="ws-links">
+      <a href="https://github.com/yazelin/world-tree" target="_blank" rel="noopener">World Tree</a>
+      <span>·</span>
       <a href="https://github.com/yazelin" target="_blank" rel="noopener">GitHub</a>
       <span>·</span>
       <a href="https://yazelin.github.io" target="_blank" rel="noopener">Field Notes</a>
-      <span>·</span>
-      <a href="#" id="openRegister">加入公會</a>
     </div>
   </footer>
 </section>
@@ -277,26 +378,59 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- Guild Register Modal                                          -->
+<!-- Start Your Journey Modal                                     -->
 <!-- ============================================================ -->
 <div class="modal-backdrop" id="registerBackdrop">
   <article class="scroll-modal register-modal" role="dialog" aria-modal="true">
     <button class="scroll-close" id="registerClose" aria-label="關閉">×</button>
     <div class="register-content">
-      <div class="register-crest">🌲</div>
-      <h2 class="register-title">加入冒險者公會</h2>
+      <svg class="register-crest-svg" viewBox="0 0 100 100" width="60" height="60">
+        <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+          <line x1="25" y1="70" x2="25" y2="40"/>
+          <path d="M18 55 L25 40 L32 55 M16 60 L25 42 L34 60 M14 65 L25 45 L36 65"/>
+          <line x1="50" y1="78" x2="50" y2="28"/>
+          <path d="M40 45 L50 28 L60 45 M37 52 L50 30 L63 52 M34 60 L50 33 L66 60 M31 68 L50 38 L69 68"/>
+          <line x1="75" y1="70" x2="75" y2="40"/>
+          <path d="M68 55 L75 40 L82 55 M66 60 L75 42 L84 60 M64 65 L75 45 L86 65"/>
+        </g>
+      </svg>
+      <h2 class="register-title">走上你自己的路</h2>
       <p class="register-lore">
-        在公會名冊上留下你的符文，<br>
-        便能於每月朔日收到工坊的消息 —<br>
-        新的魔道具、新的契約、新的冒險。
+        這個工坊裡擺的是 Yaze 的魔道具。<br>
+        但整座森林不屬於任何人 — 你也可以召喚屬於你的精靈、打造屬於你的工坊。
       </p>
-      <form class="register-form" id="registerForm">
-        <input type="email" class="register-input" placeholder="你的電子書信（email）" required>
-        <input type="text" class="register-input" placeholder="你的冒險者名（或本名）">
-        <button type="submit" class="register-submit">簽名入會</button>
-      </form>
+
+      <div class="register-steps">
+        <div class="register-step">
+          <div class="step-num">一</div>
+          <div class="step-body">
+            <div class="step-title">讀入林指引</div>
+            <div class="step-desc">理解森林的法則與路徑（約 5 分鐘）</div>
+            <a class="step-link" href="https://github.com/yazelin/world-tree/blob/main/ONBOARDING.md" target="_blank" rel="noopener">開啟 ONBOARDING.md →</a>
+          </div>
+        </div>
+
+        <div class="register-step">
+          <div class="step-num">二</div>
+          <div class="step-body">
+            <div class="step-title">召喚儀式</div>
+            <div class="step-desc">為你的精靈命名、寫 SOUL、簽訂契約（約 30 分鐘）<br>可在 Claude Code 中說「幫我走 initiation rite」，AI 會帶你做</div>
+            <a class="step-link" href="https://github.com/yazelin/world-tree/blob/main/rules/initiation-rite.md" target="_blank" rel="noopener">開啟 initiation-rite.md →</a>
+          </div>
+        </div>
+
+        <div class="register-step">
+          <div class="step-num">三</div>
+          <div class="step-body">
+            <div class="step-title">和她一起成長</div>
+            <div class="step-desc">從 Level 0 旅人走到 Level 7 森之大魔導師</div>
+            <a class="step-link" href="https://github.com/yazelin/world-tree/tree/main/quests" target="_blank" rel="noopener">Level 0-7 全部任務 →</a>
+          </div>
+        </div>
+      </div>
+
       <p class="register-note">
-        <em>* 目前僅為簽名頁，信件將於公會正式建成後寄出。</em>
+        <em>完全免費、完全開源、不用留下 email。Git 是你的備份，世界樹是你的地圖。</em>
       </p>
     </div>
   </article>
