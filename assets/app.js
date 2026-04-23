@@ -243,20 +243,50 @@
   // 暴露到 module 範圍讓 UI 互動用得到
   window.__moriAudio = { playFootstep, playFootstepsWalking, playChime };
 
+  function setAudioUIOn() {
+    iconOn.style.display  = 'block';
+    iconOff.style.display = 'none';
+    audioToggle.classList.add('active');
+  }
+  function setAudioUIOff() {
+    iconOn.style.display  = 'none';
+    iconOff.style.display = 'block';
+    audioToggle.classList.remove('active');
+  }
+
   audioToggle.addEventListener('click', () => {
     audioOn = !audioOn;
-    if (audioOn) {
-      startAmbient();
-      iconOn.style.display  = 'block';
-      iconOff.style.display = 'none';
-      audioToggle.classList.add('active');
-    } else {
-      stopAmbient();
-      iconOn.style.display  = 'none';
-      iconOff.style.display = 'block';
-      audioToggle.classList.remove('active');
-    }
+    if (audioOn) { startAmbient(); setAudioUIOn(); }
+    else         { stopAmbient();  setAudioUIOff(); }
   });
+
+  // 自動開啟：首次互動時啟動（瀏覽器不允許無 gesture autoplay）
+  // 監聽第一個 pointerdown / keydown / click，觸發後移除 listener
+  let autoStarted = false;
+  async function autoStartOnFirstInteraction(e) {
+    if (autoStarted) return;
+    // 如果點的是 audioToggle 本身，讓它的 handler 處理
+    if (e && e.target && e.target.closest && e.target.closest('#audioToggle')) return;
+    autoStarted = true;
+    audioOn = true;
+    try {
+      await startAmbient();
+      setAudioUIOn();
+    } catch (err) {
+      // 啟動失敗不要吵，使用者還能手動開
+      audioOn = false;
+      setAudioUIOff();
+    }
+    removeListeners();
+  }
+  function removeListeners() {
+    document.removeEventListener('pointerdown', autoStartOnFirstInteraction, true);
+    document.removeEventListener('keydown',    autoStartOnFirstInteraction, true);
+    document.removeEventListener('touchstart', autoStartOnFirstInteraction, true);
+  }
+  document.addEventListener('pointerdown', autoStartOnFirstInteraction, true);
+  document.addEventListener('keydown',    autoStartOnFirstInteraction, true);
+  document.addEventListener('touchstart', autoStartOnFirstInteraction, true);
 
   // ----- Boot → Title 自動推進 -----
   setTimeout(() => gotoScene('title'), 1800);
