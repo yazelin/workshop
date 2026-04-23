@@ -34,12 +34,20 @@
         <stop offset="0.4" stop-color="#f5e6a3" stop-opacity="0.8"/>
         <stop offset="1" stop-color="#c9a24d" stop-opacity="0"/>
       </radialGradient>
+      <radialGradient id="pommelGem" cx="0.35" cy="0.35" r="0.6">
+        <stop offset="0" stop-color="#f5e6a3"/>
+        <stop offset="0.5" stop-color="#c9a24d"/>
+        <stop offset="1" stop-color="#5a4218"/>
+      </radialGradient>
     </defs>
-    <!-- 杖身（斜向 45° 從右下到左上） -->
-    <line x1="52" y1="52" x2="14" y2="14" stroke="url(#wandWood)" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- 把手的纏繞 -->
-    <line x1="48" y1="56" x2="56" y2="48" stroke="#c9a24d" stroke-width="1.2" stroke-linecap="round"/>
-    <line x1="44" y1="52" x2="52" y2="44" stroke="#c9a24d" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+    <!-- 杖身：木質、45° -->
+    <line x1="49" y1="49" x2="16" y2="16" stroke="url(#wandWood)" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- 金色束環（只有一個，在杖身與尖端的交界） -->
+    <line x1="18" y1="22" x2="24" y2="16" stroke="#c9a24d" stroke-width="1.8" stroke-linecap="round"/>
+    <!-- 杖底：寶石握柄 -->
+    <circle cx="52" cy="52" r="4" fill="url(#pommelGem)" stroke="#3a2815" stroke-width="0.8"/>
+    <!-- 杖底寶石光澤 -->
+    <circle cx="50.5" cy="50.5" r="1.2" fill="#fff4c8" opacity="0.7"/>
     <!-- 尖端的光暈（大範圍） -->
     <circle cx="12" cy="12" r="10" fill="url(#wandGlow)"/>
     <!-- 尖端亮核 -->
