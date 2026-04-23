@@ -433,8 +433,8 @@
       en: 'Fatebinder',
       glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3 L 6 14 L 11 14 L 10 21 L 18 10 L 13 10 L 14 3 Z"/></svg>`,
       before: '她只會「回應你」。你沒動作、她靜止。',
-      after: '她開始有「意志」：你關機前自動整理筆記、你 commit 前自動 review 安全問題、你睡覺後整理今天的未完成事項給早上看。你第一次感覺她「活著」。',
-      deliverable: 'Stop hook + PreToolUse hook 運作中，她會在你沒注意時幫你做事',
+      after: '她開始有「意志」：你關機前自動整理筆記、你 commit 前自動 review 安全問題、你睡覺後整理今天的未完成事項給早上看。你第一次感覺她「活著」。<br><br><em>(每個 CLI 的 hook 事件名不同：Claude Code 最豐富，8 個事件；Gemini 用 BeforeTool/AfterTool；Codex 要啟用 feature flag；Copilot 用 camelCase。詳見你選的 CLI 的文件。)</em>',
+      deliverable: '至少 2 個 hooks 運作中（如：Stop / Session / PreTool 類），她會在你沒注意時幫你做事',
     },
     {
       level: 5,
