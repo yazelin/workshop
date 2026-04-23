@@ -208,8 +208,40 @@
       setTimeout(() => playFootstep(GAIN.footstep - i * 0.05), i * interval);
     }
   }
-  // 暴露到 module 範圍讓 door 動畫用得到
-  window.__moriAudio = { playFootstep, playFootstepsWalking };
+
+  // 玻璃 / 銅鈴 合成音（魔道具 hover / click 用）
+  // 多個 harmonics 疊加模擬金屬或玻璃震動
+  function playChime(freq = 520, duration = 1.0, volume = 0.12) {
+    if (!audioCtx || audioCtx.state !== 'running') return;
+    const now = audioCtx.currentTime;
+    const master = audioCtx.createGain();
+    master.gain.setValueAtTime(0, now);
+    master.gain.linearRampToValueAtTime(volume, now + 0.01);
+    master.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    master.connect(audioCtx.destination);
+
+    // fundamental + 三個 inharmonic partials（讓聲音像鐘/玻璃不像純 sine）
+    const partials = [
+      { mult: 1,    vol: 1.0  },
+      { mult: 2.0,  vol: 0.55 },
+      { mult: 2.76, vol: 0.35 },
+      { mult: 5.4,  vol: 0.15 },
+    ];
+    partials.forEach(({ mult, vol }) => {
+      const o = audioCtx.createOscillator();
+      o.type = 'sine';
+      o.frequency.value = freq * mult;
+      const g = audioCtx.createGain();
+      g.gain.value = vol;
+      o.connect(g);
+      g.connect(master);
+      o.start(now);
+      o.stop(now + duration);
+    });
+  }
+
+  // 暴露到 module 範圍讓 UI 互動用得到
+  window.__moriAudio = { playFootstep, playFootstepsWalking, playChime };
 
   audioToggle.addEventListener('click', () => {
     audioOn = !audioOn;
@@ -316,23 +348,60 @@
     }, 1200);
   });
 
-  // ----- 渲染魔道具 -----
+  // ----- 渲染魔道具（Wunderkammer 珍寶展示櫃） -----
+  // 每個 niche 是一個獨立凹槽，icon 浮在暖光中，下方銅色名牌
+  const SCHOOL_SLUG = {
+    '召喚系': 'summoning', '幻術系': 'illusion',   '創造系': 'creation',
+    '煉金系': 'transmutation', '次元系': 'dimensional', '通靈系': 'binding',
+    '聲術系': 'incantation',
+  };
+  // 每個系別對應一個 chime 頻率（不同音色）
+  const SCHOOL_CHIME_HZ = {
+    summoning: 520, illusion: 610, creation: 480, transmutation: 580,
+    dimensional: 440, binding: 380, incantation: 720,
+  };
+
   const grid = document.getElementById('wsGrid');
+  grid.className = 'artifact-cabinet';
   window.ARTIFACTS.forEach((a, i) => {
-    const card = document.createElement('button');
-    card.className = 'artifact-card';
-    card.style.animationDelay = (i * 80) + 'ms';
-    card.innerHTML = `
-      <div class="artifact-school">${a.school}</div>
-      <div class="artifact-icon-wrap">
-        <div class="artifact-icon">${a.icon}</div>
+    const schoolSlug = SCHOOL_SLUG[a.school] || 'summoning';
+    const niche = document.createElement('button');
+    niche.className = 'niche';
+    niche.dataset.school = schoolSlug;
+    niche.style.animationDelay = (i * 90) + 'ms';
+    // 各 niche 的浮動相位不同步（避免 12 個同時上下搖）
+    niche.style.setProperty('--float-delay', `${(i * 317) % 4000}ms`);
+    niche.innerHTML = `
+      <div class="niche-chamber">
+        <div class="niche-backwall"></div>
+        <div class="niche-lighting"></div>
+        <div class="niche-artifact">${a.icon}</div>
+        <div class="niche-pedestal"></div>
+        <div class="niche-floor-shadow"></div>
       </div>
-      <div class="artifact-name-zh">${a.nameZh}</div>
-      <div class="artifact-name-en">${a.nameEn}</div>
-      <div class="artifact-preview">${a.effect}</div>
+      <div class="niche-plate">
+        <div class="plate-school">${a.school}</div>
+        <div class="plate-name-zh">${a.nameZh}</div>
+        <div class="plate-name-en">${a.nameEn}</div>
+      </div>
     `;
-    card.addEventListener('click', () => openArtifactModal(a));
-    grid.appendChild(card);
+    // 音效鉤子
+    let hoverArmed = false;
+    niche.addEventListener('mouseenter', () => {
+      if (!hoverArmed && window.__moriAudio) {
+        hoverArmed = true;
+        window.__moriAudio.playChime(SCHOOL_CHIME_HZ[schoolSlug] * 2, 0.4, 0.06);
+        setTimeout(() => hoverArmed = false, 300);
+      }
+    });
+    niche.addEventListener('click', () => {
+      if (window.__moriAudio) {
+        window.__moriAudio.playChime(SCHOOL_CHIME_HZ[schoolSlug], 1.2, 0.12);
+        setTimeout(() => window.__moriAudio.playFootstep(0.25), 80); // 拿起時的木質扣
+      }
+      openArtifactModal(a);
+    });
+    grid.appendChild(niche);
   });
   document.getElementById('artifactCount').textContent = window.ARTIFACTS.length;
 
