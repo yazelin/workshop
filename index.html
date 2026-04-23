@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>森之召喚師工坊 · The Forest Summoner's Workshop</title>
+<meta name="description" content="召喚師 Yaze 與契約精靈 Mori 的魔道具工坊 — 自由取閱，自由傳承。">
+<meta property="og:title" content="森之召喚師工坊">
+<meta property="og:description" content="召喚師 Yaze 與契約精靈 Mori 的魔道具工坊">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<!-- ============================================================ -->
+<!-- Mori 精靈游標（跟隨滑鼠）                                     -->
+<!-- ============================================================ -->
+<div class="mori-cursor" id="moriCursor"></div>
+<div class="mori-cursor-core" id="moriCursorCore"></div>
+
+<!-- ============================================================ -->
+<!-- 環境粒子（螢火 / 光點）                                        -->
+<!-- ============================================================ -->
+<div class="particles" id="particles"></div>
+
+<!-- ============================================================ -->
+<!-- 音訊切換（右上角）                                             -->
+<!-- ============================================================ -->
+<button class="audio-toggle" id="audioToggle" aria-label="Toggle ambient audio">
+  <svg class="audio-icon audio-icon--off" viewBox="0 0 24 24" width="20" height="20">
+    <path d="M11 5L6 9H2v6h4l5 4V5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <line x1="15" y1="9" x2="21" y2="15" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="21" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="1.5"/>
+  </svg>
+  <svg class="audio-icon audio-icon--on" viewBox="0 0 24 24" width="20" height="20" style="display:none">
+    <path d="M11 5L6 9H2v6h4l5 4V5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M15 9a4 4 0 010 6M18 6a8 8 0 010 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+</button>
+
+<!-- ============================================================ -->
+<!-- Scene 1: Boot — 黑畫面淡入                                    -->
+<!-- ============================================================ -->
+<section class="scene scene--boot active" id="sceneBoot">
+  <div class="boot-text">
+    <span class="boot-line">...</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- Scene 2: Title — 標題畫面                                     -->
+<!-- ============================================================ -->
+<section class="scene scene--title" id="sceneTitle">
+  <div class="forest-bg">
+    <div class="forest-layer forest-layer--sky"></div>
+    <div class="forest-layer forest-layer--mist mist--back"></div>
+    <div class="forest-layer forest-layer--trees-back"></div>
+    <div class="forest-layer forest-layer--mist mist--mid"></div>
+    <div class="forest-layer forest-layer--trees-front"></div>
+    <div class="forest-layer forest-layer--ground"></div>
+  </div>
+
+  <div class="title-content">
+    <!-- 三樹徽紋（森）-->
+    <svg class="crest" viewBox="0 0 100 100" width="80" height="80">
+      <g fill="none" stroke="#c9a24d" stroke-width="1.2" stroke-linecap="round">
+        <!-- 左樹 -->
+        <line x1="25" y1="70" x2="25" y2="40"/>
+        <path d="M18 55 L25 40 L32 55 M16 60 L25 42 L34 60 M14 65 L25 45 L36 65"/>
+        <!-- 中樹 -->
+        <line x1="50" y1="78" x2="50" y2="28"/>
+        <path d="M40 45 L50 28 L60 45 M37 52 L50 30 L63 52 M34 60 L50 33 L66 60 M31 68 L50 38 L69 68"/>
+        <!-- 右樹 -->
+        <line x1="75" y1="70" x2="75" y2="40"/>
+        <path d="M68 55 L75 40 L82 55 M66 60 L75 42 L84 60 M64 65 L75 45 L86 65"/>
+        <!-- 地平線 -->
+        <line x1="10" y1="82" x2="90" y2="82" stroke-dasharray="2,3" opacity="0.5"/>
+      </g>
+    </svg>
+
+    <h1 class="title">
+      <span class="title-zh">森之召喚師工坊</span>
+      <span class="title-en">The Forest Summoner's Workshop</span>
+    </h1>
+
+    <p class="lore">
+      此地為召喚師 <span class="ink-gold">Yaze</span> 與契約精靈 <span class="ink-gold">Mori</span> 所築之工坊。<br>
+      推開門扉，見識此間收藏的魔道具。
+    </p>
+
+    <button class="enter-btn" id="enterBtn" type="button">
+      <span class="enter-btn-zh">推 ・ 門 ・ 而 ・ 入</span>
+      <span class="enter-btn-en">— Enter the Workshop —</span>
+    </button>
+
+    <div class="title-footer">
+      <span class="meta-lv">Summoner · Lv. ??</span>
+      <span class="meta-sep">·</span>
+      <span class="meta-guild">Forest Guild · Est. 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- Scene 3: Forest Path — 穿越森林（parallax 動畫）               -->
+<!-- ============================================================ -->
+<section class="scene scene--path" id="scenePath">
+  <div class="forest-bg path-bg">
+    <div class="forest-layer forest-layer--sky"></div>
+    <div class="forest-layer forest-layer--mist mist--back path-mist"></div>
+    <div class="forest-layer forest-layer--trees-back path-back"></div>
+    <div class="forest-layer forest-layer--trees-front path-front"></div>
+    <div class="forest-layer forest-layer--ground"></div>
+  </div>
+  <div class="path-narration">
+    <p class="narration-line" data-delay="0">穿過林間小徑...</p>
+    <p class="narration-line" data-delay="1400">樹影在霧中搖動...</p>
+    <p class="narration-line" data-delay="2800">遠處，一扇門在光裡等你。</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- Scene 4: Workshop Door — 門前                                 -->
+<!-- ============================================================ -->
+<section class="scene scene--door" id="sceneDoor">
+  <div class="door-bg">
+    <div class="door-frame">
+      <div class="door-left"></div>
+      <div class="door-right"></div>
+      <div class="door-glow"></div>
+    </div>
+  </div>
+  <div class="door-prompt">
+    <p class="door-hint">門內有微光漏出</p>
+    <button class="door-btn" id="doorBtn" type="button">
+      <span>推開門</span>
+      <span class="door-btn-en">— Push Open —</span>
+    </button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- Scene 5: Workshop Interior — 工坊內部                         -->
+<!-- ============================================================ -->
+<section class="scene scene--workshop" id="sceneWorkshop">
+  <!-- 頂部導覽 -->
+  <header class="ws-header">
+    <button class="ws-back" id="wsBack" aria-label="返回森林">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+      <span>返回森林</span>
+    </button>
+    <div class="ws-title-bar">
+      <div class="ws-title-zh">森之工坊</div>
+      <div class="ws-title-en">— The Workshop —</div>
+    </div>
+    <div class="ws-counter">
+      <span id="artifactCount">12</span> 件藏品
+    </div>
+  </header>
+
+  <!-- 介紹橫幅 -->
+  <div class="ws-intro">
+    <p>
+      <span class="ink-gold">魔道具</span>就放在工坊各處。<br>
+      靠近觀察，點取即可查閱其典故與效能。
+    </p>
+  </div>
+
+  <!-- 魔道具格網 -->
+  <main class="ws-grid" id="wsGrid">
+    <!-- 魔道具卡片由 JS 渲染進來 -->
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="ws-footer">
+    <p class="ws-quote">
+      <em>"Take what speaks to you. Carry it into your own forest."</em>
+    </p>
+    <div class="ws-links">
+      <a href="https://github.com/yazelin" target="_blank" rel="noopener">GitHub</a>
+      <span>·</span>
+      <a href="https://yazelin.github.io" target="_blank" rel="noopener">Field Notes</a>
+      <span>·</span>
+      <a href="#" id="openRegister">加入公會</a>
+    </div>
+  </footer>
+</section>
+
+<!-- ============================================================ -->
+<!-- Artifact Detail Modal                                         -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <article class="scroll-modal" id="scrollModal" role="dialog" aria-modal="true">
+    <button class="scroll-close" id="scrollClose" aria-label="關閉">×</button>
+    <div class="scroll-content" id="scrollContent">
+      <!-- 內容由 JS 注入 -->
+    </div>
+  </article>
+</div>
+
+<!-- ============================================================ -->
+<!-- Guild Register Modal                                          -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="registerBackdrop">
+  <article class="scroll-modal register-modal" role="dialog" aria-modal="true">
+    <button class="scroll-close" id="registerClose" aria-label="關閉">×</button>
+    <div class="register-content">
+      <div class="register-crest">🌲</div>
+      <h2 class="register-title">加入冒險者公會</h2>
+      <p class="register-lore">
+        在公會名冊上留下你的符文，<br>
+        便能於每月朔日收到工坊的消息 —<br>
+        新的魔道具、新的契約、新的冒險。
+      </p>
+      <form class="register-form" id="registerForm">
+        <input type="email" class="register-input" placeholder="你的電子書信（email）" required>
+        <input type="text" class="register-input" placeholder="你的冒險者名（或本名）">
+        <button type="submit" class="register-submit">簽名入會</button>
+      </form>
+      <p class="register-note">
+        <em>* 目前僅為簽名頁，信件將於公會正式建成後寄出。</em>
+      </p>
+    </div>
+  </article>
+</div>
+
+<script src="assets/artifacts.js"></script>
+<script src="assets/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,992 @@
+/* ===========================================================
+   森之召喚師工坊 · 主樣式
+   Vanilla CSS，無框架、無預處理器、無依賴
+   =========================================================== */
+
+/* ---------- 變數 ---------- */
+:root {
+  --forest-black:    #0a0e0c;
+  --forest-deep:     #121a15;
+  --forest-dark:     #1a2921;
+  --forest-mid:      #2d4a3e;
+  --forest-moss:     #4a6b5a;
+  --forest-mist:     rgba(167, 196, 178, 0.08);
+  --parchment:       #e8dcc0;
+  --parchment-soft:  #d4c598;
+  --parchment-dark:  #baa875;
+  --ink:             #1a1410;
+  --ink-soft:        #4a4035;
+  --gold:            #c9a24d;
+  --gold-soft:       #d4b572;
+  --gold-faint:      rgba(201, 162, 77, 0.15);
+  --mist-blue:       #6b8a99;
+  --firefly:         #f5e6a3;
+
+  --serif-en:  "Cinzel", "Cormorant Garamond", "IM Fell English", Georgia, serif;
+  --serif-it:  "Cormorant Garamond", "IM Fell English", Georgia, serif;
+  --serif-zh:  "Noto Serif TC", "Source Han Serif TC", "PingFang TC", serif;
+  --mono:      "Menlo", "Fira Code", Consolas, monospace;
+
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-dramatic: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ---------- Reset & 基底 ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--forest-black);
+  color: var(--parchment);
+  font-family: var(--serif-zh);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 隱藏系統游標，讓 Mori 成為視覺焦點 */
+  cursor: none;
+}
+
+body { position: relative; }
+
+a { color: var(--gold-soft); text-decoration: none; transition: color .2s ease; }
+a:hover { color: var(--parchment); }
+button { font-family: inherit; cursor: none; }
+
+/* ---------- Mori 精靈游標 ---------- */
+.mori-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,230,163,0.35) 0%, rgba(245,230,163,0) 70%);
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s var(--ease-soft), height 0.3s var(--ease-soft);
+  mix-blend-mode: screen;
+}
+.mori-cursor-core {
+  position: fixed;
+  top: 0; left: 0;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--firefly);
+  box-shadow: 0 0 10px var(--firefly), 0 0 20px rgba(245,230,163,0.4);
+  pointer-events: none;
+  z-index: 10001;
+  transform: translate(-50%, -50%);
+}
+.mori-cursor.hover-active {
+  width: 46px; height: 46px;
+}
+
+/* ---------- 環境粒子（螢火） ---------- */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--firefly);
+  box-shadow: 0 0 8px var(--firefly);
+  opacity: 0;
+  animation: firefly linear infinite;
+}
+@keyframes firefly {
+  0%   { transform: translateY(100vh) translateX(0) scale(0.6); opacity: 0; }
+  10%  { opacity: 0.8; }
+  50%  { transform: translateY(50vh) translateX(20px) scale(1); opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) translateX(-20px) scale(0.4); opacity: 0; }
+}
+
+/* ---------- 音訊切換鈕 ---------- */
+.audio-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 42px; height: 42px;
+  background: rgba(10,14,12,0.6);
+  border: 1px solid rgba(201,162,77,0.3);
+  border-radius: 50%;
+  color: var(--gold-soft);
+  backdrop-filter: blur(6px);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s ease;
+}
+.audio-toggle:hover {
+  background: rgba(201,162,77,0.15);
+  border-color: var(--gold);
+}
+
+/* ===========================================================
+   Scene 架構
+   =========================================================== */
+.scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s var(--ease-soft), visibility 1.2s var(--ease-soft);
+  z-index: 1;
+}
+.scene.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+.scene.exiting {
+  opacity: 0;
+  z-index: 1;
+}
+
+/* ===========================================================
+   Scene 1: Boot
+   =========================================================== */
+.scene--boot {
+  background: var(--forest-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.boot-text {
+  font-family: var(--serif-en);
+  color: var(--gold-faint);
+  font-size: 2rem;
+  letter-spacing: 1rem;
+  animation: bootPulse 3s ease-in-out infinite;
+}
+@keyframes bootPulse {
+  0%, 100% { opacity: 0.2; }
+  50%      { opacity: 0.8; }
+}
+
+/* ===========================================================
+   森林背景共用
+   =========================================================== */
+.forest-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.forest-layer {
+  position: absolute;
+  inset: 0;
+  transition: transform 6s var(--ease-soft);
+}
+/* 天空 */
+.forest-layer--sky {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(201,162,77,0.08) 0%, transparent 50%),
+    linear-gradient(to bottom,
+      #0d1612 0%,
+      #142018 40%,
+      #1a2921 70%,
+      #0f1914 100%);
+}
+/* 霧氣 */
+.forest-layer--mist {
+  background:
+    radial-gradient(ellipse 120% 40% at 50% 70%, var(--forest-mist) 0%, transparent 60%);
+  mix-blend-mode: screen;
+  animation: mistDrift 18s ease-in-out infinite alternate;
+}
+.mist--back  { opacity: 0.7; }
+.mist--mid   { opacity: 0.5; animation-duration: 26s; }
+@keyframes mistDrift {
+  0%   { transform: translateX(-3%) scale(1); }
+  100% { transform: translateX(3%) scale(1.1); }
+}
+/* 後排樹 — 用 CSS gradient 模擬剪影 */
+.forest-layer--trees-back {
+  background:
+    /* 樹幹剪影 */
+    linear-gradient(to right,
+      transparent 0%,
+      rgba(10,14,12,0.85) 8%, transparent 10%,
+      transparent 18%,
+      rgba(10,14,12,0.85) 22%, transparent 24%,
+      transparent 35%,
+      rgba(10,14,12,0.85) 40%, transparent 42%,
+      transparent 55%,
+      rgba(10,14,12,0.85) 62%, transparent 64%,
+      transparent 75%,
+      rgba(10,14,12,0.85) 82%, transparent 84%,
+      transparent 95%,
+      rgba(10,14,12,0.85) 98%),
+    linear-gradient(to top,
+      rgba(10,14,12,0.9) 0%,
+      rgba(10,14,12,0.5) 40%,
+      transparent 60%);
+  filter: blur(3px);
+  opacity: 0.8;
+}
+/* 前排樹 — 更深色 */
+.forest-layer--trees-front {
+  background:
+    linear-gradient(to right,
+      transparent 0%,
+      rgba(0,0,0,0.95) 4%, transparent 6%,
+      transparent 15%,
+      rgba(0,0,0,0.95) 20%, transparent 22%,
+      transparent 48%,
+      rgba(0,0,0,0.95) 55%, transparent 57%,
+      transparent 72%,
+      rgba(0,0,0,0.95) 80%, transparent 82%,
+      transparent 92%,
+      rgba(0,0,0,0.95) 96%),
+    linear-gradient(to top,
+      rgba(0,0,0,0.95) 0%,
+      rgba(0,0,0,0.7) 30%,
+      transparent 55%);
+  filter: blur(1px);
+}
+/* 地面 */
+.forest-layer--ground {
+  background:
+    linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+  height: 25vh;
+  top: auto;
+  bottom: 0;
+}
+
+/* ===========================================================
+   Scene 2: Title
+   =========================================================== */
+.scene--title { display: flex; align-items: center; justify-content: center; }
+
+.title-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+  max-width: 700px;
+}
+.crest {
+  margin: 0 auto 1.5rem;
+  display: block;
+  opacity: 0;
+  animation: crestFadeIn 2.2s var(--ease-soft) 0.5s forwards;
+  filter: drop-shadow(0 0 20px rgba(201,162,77,0.4));
+}
+@keyframes crestFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.title {
+  opacity: 0;
+  animation: fadeUp 2s var(--ease-soft) 1.2s forwards;
+}
+.title-zh {
+  display: block;
+  font-family: var(--serif-zh);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--parchment);
+  text-shadow: 0 0 30px rgba(201,162,77,0.3);
+  margin-bottom: 0.5rem;
+}
+.title-en {
+  display: block;
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  letter-spacing: 0.15em;
+  color: var(--gold-soft);
+  opacity: 0.9;
+}
+.lore {
+  opacity: 0;
+  animation: fadeUp 2s var(--ease-soft) 2.2s forwards;
+  margin: 2.5rem auto 3rem;
+  font-size: 1rem;
+  line-height: 2;
+  color: var(--parchment);
+  opacity: 0.9;
+  max-width: 560px;
+}
+.ink-gold { color: var(--gold-soft); font-weight: 500; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 0.95; transform: translateY(0); }
+}
+
+/* Enter 按鈕 */
+.enter-btn {
+  opacity: 0;
+  animation: fadeUp 2s var(--ease-soft) 3.2s forwards, btnPulse 4s ease-in-out 5s infinite;
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.2rem 3rem;
+  background: transparent;
+  border: 1px solid var(--gold-soft);
+  color: var(--parchment);
+  font-family: var(--serif-zh);
+  letter-spacing: 0.3em;
+  font-size: 1rem;
+  transition: all 0.4s var(--ease-soft);
+  overflow: hidden;
+}
+.enter-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(201,162,77,0.25) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.enter-btn:hover::before { opacity: 1; }
+.enter-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold-soft);
+  letter-spacing: 0.4em;
+}
+.enter-btn-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-soft);
+  opacity: 0.7;
+}
+@keyframes btnPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,162,77,0.3); }
+  50%      { box-shadow: 0 0 30px 5px rgba(201,162,77,0.15); }
+}
+
+.title-footer {
+  opacity: 0;
+  animation: fadeUp 2s var(--ease-soft) 4s forwards;
+  margin-top: 3rem;
+  font-family: var(--serif-en);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--mist-blue);
+}
+.meta-sep { margin: 0 0.6rem; opacity: 0.5; }
+
+/* ===========================================================
+   Scene 3: Forest Path
+   =========================================================== */
+.scene--path .path-bg {
+  animation: pathAdvance 4s var(--ease-dramatic) forwards;
+}
+@keyframes pathAdvance {
+  0%   { transform: scale(1);   filter: brightness(1); }
+  100% { transform: scale(1.3); filter: brightness(0.85); }
+}
+.path-back { animation: layerFloatBack 4s ease-in-out forwards; }
+.path-front { animation: layerFloatFront 4s ease-in-out forwards; }
+.path-mist  { animation: pathMist 4s ease-in-out forwards; }
+@keyframes layerFloatBack {
+  from { transform: scale(1);   }
+  to   { transform: scale(1.15); }
+}
+@keyframes layerFloatFront {
+  from { transform: scale(1);   }
+  to   { transform: scale(1.4); }
+}
+@keyframes pathMist {
+  0%   { opacity: 0.4; transform: scale(1); }
+  100% { opacity: 0.9; transform: scale(1.3); }
+}
+
+.path-narration {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: var(--serif-zh);
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  color: var(--parchment);
+  z-index: 10;
+  width: 80%;
+  max-width: 600px;
+}
+.narration-line {
+  opacity: 0;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 2px 15px rgba(0,0,0,0.8);
+}
+.scene--path.active .narration-line {
+  animation: narrationFade 1.8s var(--ease-soft) forwards;
+}
+.scene--path.active .narration-line:nth-child(1) { animation-delay: 0.3s; }
+.scene--path.active .narration-line:nth-child(2) { animation-delay: 1.7s; }
+.scene--path.active .narration-line:nth-child(3) { animation-delay: 3.1s; }
+@keyframes narrationFade {
+  0%   { opacity: 0; }
+  25%, 75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ===========================================================
+   Scene 4: Door
+   =========================================================== */
+.scene--door {
+  background: radial-gradient(ellipse at center, var(--forest-deep) 0%, var(--forest-black) 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.door-bg { position: relative; width: 400px; height: 600px; max-width: 80vw; max-height: 70vh; }
+.door-frame {
+  position: relative;
+  width: 100%; height: 100%;
+  display: flex;
+  border: 2px solid rgba(201,162,77,0.4);
+  box-shadow:
+    0 0 60px rgba(201,162,77,0.2),
+    inset 0 0 40px rgba(0,0,0,0.8);
+  background:
+    linear-gradient(to bottom, #2a1d12 0%, #1a1008 100%);
+}
+.door-left, .door-right {
+  flex: 1;
+  background:
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent 40px,
+      rgba(0,0,0,0.3) 40px, rgba(0,0,0,0.3) 42px);
+  border-right: 1px solid rgba(0,0,0,0.5);
+  position: relative;
+  transition: transform 2s var(--ease-dramatic);
+}
+.door-right { border-right: none; border-left: 1px solid rgba(0,0,0,0.5); }
+.scene--door.opening .door-left  { transform: perspective(1000px) rotateY(-80deg); }
+.scene--door.opening .door-right { transform: perspective(1000px) rotateY(80deg); }
+.door-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(245,230,163,0.9) 0%, rgba(245,230,163,0) 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s;
+}
+.scene--door.opening .door-glow { opacity: 1; }
+
+.door-prompt {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+}
+.door-hint {
+  font-family: var(--serif-zh);
+  font-size: 0.9rem;
+  letter-spacing: 0.3em;
+  color: var(--parchment);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+  animation: hintPulse 2s ease-in-out infinite;
+}
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+.door-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1rem 2.5rem;
+  background: transparent;
+  border: 1px solid var(--gold-soft);
+  color: var(--parchment);
+  font-family: var(--serif-zh);
+  letter-spacing: 0.2em;
+  font-size: 1rem;
+  transition: all 0.3s var(--ease-soft);
+}
+.door-btn:hover {
+  background: rgba(201,162,77,0.15);
+  color: var(--gold-soft);
+}
+.door-btn-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-soft);
+  opacity: 0.7;
+}
+
+/* ===========================================================
+   Scene 5: Workshop Interior
+   =========================================================== */
+.scene--workshop {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(201,162,77,0.04) 0%, transparent 50%),
+    linear-gradient(to bottom, var(--forest-deep) 0%, var(--forest-black) 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.scene--workshop::-webkit-scrollbar { width: 8px; }
+.scene--workshop::-webkit-scrollbar-track { background: var(--forest-black); }
+.scene--workshop::-webkit-scrollbar-thumb { background: var(--forest-mid); border-radius: 4px; }
+
+.ws-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+  background: rgba(10,14,12,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,162,77,0.15);
+  z-index: 50;
+}
+.ws-back {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--gold-soft);
+  font-family: var(--serif-zh);
+  letter-spacing: 0.15em;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+.ws-back:hover { color: var(--parchment); }
+.ws-title-bar { text-align: center; }
+.ws-title-zh {
+  font-family: var(--serif-zh);
+  font-size: 1.1rem;
+  letter-spacing: 0.5em;
+  color: var(--parchment);
+  font-weight: 500;
+  padding-left: 0.5em; /* 抵消 letter-spacing 造成的右偏 */
+}
+.ws-title-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-soft);
+  margin-top: 2px;
+}
+.ws-counter {
+  font-family: var(--serif-en);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--mist-blue);
+}
+
+.ws-intro {
+  text-align: center;
+  padding: 4rem 2rem 3rem;
+  font-family: var(--serif-zh);
+  font-size: 1rem;
+  color: var(--parchment);
+  opacity: 0.85;
+  line-height: 2;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.ws-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.8rem;
+  padding: 1rem 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.artifact-card {
+  position: relative;
+  padding: 1.8rem 1.5rem 1.3rem;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(201,162,77,0.12) 0%, transparent 60%),
+    linear-gradient(to bottom, rgba(30,44,36,0.6) 0%, rgba(18,26,21,0.8) 100%);
+  border: 1px solid rgba(201,162,77,0.2);
+  border-radius: 3px;
+  transition: all 0.4s var(--ease-soft);
+  overflow: hidden;
+  opacity: 0;
+  animation: cardEnter 0.8s var(--ease-soft) forwards;
+}
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.artifact-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 120%, rgba(201,162,77,0.2) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.artifact-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold-soft);
+  box-shadow:
+    0 8px 30px rgba(0,0,0,0.6),
+    0 0 40px rgba(201,162,77,0.15);
+}
+.artifact-card:hover::before { opacity: 1; }
+
+.artifact-school {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  font-family: var(--serif-zh);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-soft);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgba(201,162,77,0.4);
+  border-radius: 2px;
+  background: rgba(10,14,12,0.6);
+}
+.artifact-icon-wrap {
+  width: 64px; height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem auto 1.2rem;
+  position: relative;
+}
+.artifact-icon-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,162,77,0.2) 0%, transparent 70%);
+  filter: blur(8px);
+  animation: iconGlow 4s ease-in-out infinite;
+}
+.artifact-card:hover .artifact-icon-wrap::before {
+  background: radial-gradient(circle, rgba(245,230,163,0.35) 0%, transparent 70%);
+}
+@keyframes iconGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.05); }
+}
+.artifact-icon {
+  font-size: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+.artifact-name-zh {
+  font-family: var(--serif-zh);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--parchment);
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+.artifact-name-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--gold-soft);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.artifact-preview {
+  font-family: var(--serif-zh);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--parchment);
+  opacity: 0.75;
+  text-align: center;
+  border-top: 1px dashed rgba(201,162,77,0.2);
+  padding-top: 1rem;
+}
+
+.ws-footer {
+  padding: 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(201,162,77,0.1);
+}
+.ws-quote {
+  font-family: var(--serif-it);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--gold-soft);
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+.ws-links {
+  font-family: var(--serif-zh);
+  font-size: 0.85rem;
+  color: var(--parchment);
+  opacity: 0.7;
+}
+.ws-links span { margin: 0 0.5rem; opacity: 0.5; }
+
+/* ===========================================================
+   Artifact Modal（卷軸）
+   =========================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,14,12,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.modal-backdrop.active {
+  display: flex;
+  opacity: 1;
+}
+
+.scroll-modal {
+  position: relative;
+  max-width: 560px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  background:
+    radial-gradient(ellipse at top, rgba(201,162,77,0.15) 0%, transparent 50%),
+    linear-gradient(to bottom, #efe3c7 0%, #d4c598 100%);
+  color: var(--ink);
+  border: 1px solid var(--parchment-dark);
+  border-radius: 2px;
+  padding: 3rem 2.5rem 2.5rem;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.6),
+    0 0 100px rgba(201,162,77,0.25);
+  animation: scrollOpen 0.6s var(--ease-soft);
+}
+@keyframes scrollOpen {
+  from { opacity: 0; transform: scale(0.96) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.scroll-modal::-webkit-scrollbar { width: 6px; }
+.scroll-modal::-webkit-scrollbar-thumb { background: var(--parchment-dark); }
+
+.scroll-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  width: 32px; height: 32px;
+  background: transparent;
+  border: 1px solid rgba(26,20,16,0.2);
+  border-radius: 50%;
+  color: var(--ink);
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: all 0.2s;
+}
+.scroll-close:hover {
+  background: rgba(26,20,16,0.08);
+  border-color: var(--ink);
+}
+
+.scroll-content .artifact-school-tag {
+  display: inline-block;
+  font-family: var(--serif-zh);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--gold);
+  background: rgba(201,162,77,0.1);
+  margin-bottom: 1.2rem;
+}
+.scroll-content .scroll-icon {
+  font-size: 3.5rem;
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+}
+.scroll-content .scroll-name-zh {
+  font-family: var(--serif-zh);
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+.scroll-content .scroll-name-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+.scroll-content .scroll-repo {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  text-align: center;
+  opacity: 0.6;
+  margin-bottom: 2rem;
+}
+.scroll-content .scroll-section-label {
+  font-family: var(--serif-en);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+.scroll-content .scroll-lore {
+  font-family: var(--serif-zh);
+  font-size: 1rem;
+  line-height: 2;
+  font-style: italic;
+  color: var(--ink);
+  padding-left: 1rem;
+  border-left: 2px solid var(--gold);
+  margin-bottom: 2rem;
+}
+.scroll-content .scroll-effect {
+  font-family: var(--serif-zh);
+  font-size: 0.88rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  margin-bottom: 2.2rem;
+}
+.scroll-content .scroll-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed var(--parchment-dark);
+}
+.scroll-btn {
+  font-family: var(--serif-en);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.2rem;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.scroll-btn-primary {
+  background: var(--forest-deep);
+  color: var(--gold-soft);
+  border: 1px solid var(--forest-deep);
+}
+.scroll-btn-primary:hover {
+  background: var(--forest-mid);
+  color: var(--parchment);
+}
+.scroll-btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink-soft);
+}
+.scroll-btn-secondary:hover {
+  background: rgba(26,20,16,0.08);
+}
+
+/* ===========================================================
+   Register Modal
+   =========================================================== */
+.register-modal { text-align: center; }
+.register-crest {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+.register-title {
+  font-family: var(--serif-zh);
+  font-size: 1.6rem;
+  letter-spacing: 0.3em;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+.register-lore {
+  font-family: var(--serif-zh);
+  font-size: 0.95rem;
+  line-height: 2;
+  color: var(--ink-soft);
+  margin-bottom: 2rem;
+}
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-width: 360px;
+  margin: 0 auto 1.5rem;
+}
+.register-input {
+  padding: 0.8rem 1rem;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid var(--parchment-dark);
+  border-radius: 2px;
+  color: var(--ink);
+  font-family: var(--serif-zh);
+  font-size: 0.95rem;
+}
+.register-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.7);
+}
+.register-submit {
+  padding: 0.9rem;
+  background: var(--forest-deep);
+  color: var(--gold-soft);
+  border: 1px solid var(--forest-deep);
+  font-family: var(--serif-zh);
+  letter-spacing: 0.3em;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.register-submit:hover {
+  background: var(--forest-mid);
+  color: var(--parchment);
+}
+.register-note {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  opacity: 0.6;
+}
+
+/* ===========================================================
+   RWD
+   =========================================================== */
+@media (max-width: 720px) {
+  html, body { font-size: 15px; }
+  .ws-header { padding: 1rem; }
+  .ws-title-zh { font-size: 0.95rem; letter-spacing: 0.3em; }
+  .ws-grid { grid-template-columns: 1fr; gap: 1.2rem; padding: 0 1rem 3rem; }
+  .scroll-modal { padding: 2.5rem 1.5rem 2rem; }
+  .lore { font-size: 0.9rem; }
+  body { cursor: auto; } /* 手機用系統游標 */
+  button { cursor: pointer; }
+  .mori-cursor, .mori-cursor-core { display: none; }
+}
+
+/* 偏好：關閉動畫（無障礙） */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01s !important;
+    transition-duration: 0.01s !important;
+  }
+}
