@@ -82,12 +82,26 @@
   for (let i = 0; i < 14; i++) setTimeout(spawnParticle, i * 600);
   setInterval(spawnParticle, 1800);
 
-  // ----- 環境音（CC0 ambient loop） -----
-  // 來源：OpenGameArt.org "Cathedral in the forest" (CC0, Public Domain)
-  // 用 Web Audio API 的 AudioBufferSourceNode 達到無縫循環（比 <audio loop> 更乾淨）
-  const AMBIENT_URL = 'assets/audio/forest-ambient.ogg';
-  let audioCtx, ambientSource, ambientGain, ambientBuffer;
+  // ===========================================================
+  // 環境音層次系統
+  // layer 1: forest-ambient (CC0, OpenGameArt "Cathedral in the forest")
+  // layer 2: forest-birds (CC0, bobjt)
+  // footstep: step-1~4.wav (CC-BY, dklon)
+  // 各層用獨立 GainNode，可分別淡入淡出
+  // ===========================================================
+  const AUDIO_URLS = {
+    forest:  'assets/audio/forest-ambient.ogg',
+    birds:   'assets/audio/forest-birds.ogg',
+    steps:   ['assets/audio/step-1.wav', 'assets/audio/step-2.wav',
+              'assets/audio/step-3.wav', 'assets/audio/step-4.wav'],
+  };
+  const GAIN = { forest: 0.75, birds: 0.35, footstep: 0.6 };
+
+  let audioCtx;
   let audioOn = false;
+  const buffers = {};     // { forest, birds, step_0..3 }
+  const sources = {};     // { forest, birds }
+  const gains   = {};     // { forest, birds }
   const audioToggle = document.getElementById('audioToggle');
   const iconOn  = audioToggle.querySelector('.audio-icon--on');
   const iconOff = audioToggle.querySelector('.audio-icon--off');
@@ -104,42 +118,60 @@
     return audioCtx;
   }
 
-  async function loadAmbientBuffer() {
-    if (ambientBuffer) return ambientBuffer;
-    console.log('[audio] fetching', AMBIENT_URL);
-    const resp = await fetch(AMBIENT_URL);
-    if (!resp.ok) throw new Error('fetch failed: ' + resp.status);
-    const arrayBuffer = await resp.arrayBuffer();
-    console.log('[audio] decoding', arrayBuffer.byteLength, 'bytes');
-    ambientBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-    console.log('[audio] decoded', ambientBuffer.duration.toFixed(1), 'sec');
-    return ambientBuffer;
+  async function loadBuffer(url) {
+    if (buffers[url]) return buffers[url];
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('fetch ' + url + ' ' + resp.status);
+    const ab = await resp.arrayBuffer();
+    const buf = await audioCtx.decodeAudioData(ab);
+    buffers[url] = buf;
+    return buf;
+  }
+
+  async function startLayer(name, url, targetGain, loop = true) {
+    if (sources[name]) return; // already playing
+    const buf = await loadBuffer(url);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0, audioCtx.currentTime);
+    g.gain.linearRampToValueAtTime(targetGain, audioCtx.currentTime + 4);
+    g.connect(audioCtx.destination);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    src.loop = loop;
+    src.connect(g);
+    src.start();
+    sources[name] = src;
+    gains[name] = g;
+    console.log('[audio] layer started:', name, 'duration', buf.duration.toFixed(1) + 's');
+  }
+
+  function stopLayer(name, fadeSec = 1.5) {
+    const g = gains[name];
+    const s = sources[name];
+    if (!g || !s) return;
+    g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + fadeSec);
+    setTimeout(() => {
+      try { s.stop(); } catch (e) {}
+      delete sources[name];
+      delete gains[name];
+    }, fadeSec * 1000 + 100);
   }
 
   async function startAmbient() {
     try {
       await ensureAudioCtx();
-      const buffer = await loadAmbientBuffer();
-
-      // 若已在播，跳過
-      if (ambientSource) return;
-
-      ambientGain = audioCtx.createGain();
-      ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
-      // 4 秒 ease-in 淡入到 0.5（森林環境音需要有存在感）
-      ambientGain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 4);
-      ambientGain.connect(audioCtx.destination);
-
-      ambientSource = audioCtx.createBufferSource();
-      ambientSource.buffer = buffer;
-      ambientSource.loop = true;
-      ambientSource.connect(ambientGain);
-      ambientSource.start();
-
-      console.log('[audio] forest ambient playing');
+      // 兩層並行淡入
+      await Promise.all([
+        startLayer('forest', AUDIO_URLS.forest, GAIN.forest),
+        startLayer('birds',  AUDIO_URLS.birds,  GAIN.birds),
+      ]);
+      // 預先載入腳步聲（給之後用，不播）
+      for (const url of AUDIO_URLS.steps) {
+        loadBuffer(url).catch(e => console.warn('[audio] step preload:', e));
+      }
     } catch (e) {
       console.error('[audio] failed to start:', e);
-      alert('音訊啟動失敗：' + e.message + '\n\n打開 F12 Console 看詳細訊息。');
+      alert('音訊啟動失敗：' + e.message + '\n\nF12 Console 看詳細。');
       audioOn = false;
       iconOn.style.display  = 'none';
       iconOff.style.display = 'block';
@@ -148,16 +180,36 @@
   }
 
   function stopAmbient() {
-    if (ambientGain && audioCtx) {
-      // 1.5 秒淡出
-      ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5);
-    }
-    setTimeout(() => {
-      try { ambientSource && ambientSource.stop(); } catch(e) {}
-      ambientSource = null;
-      ambientGain = null;
-    }, 1700);
+    stopLayer('forest');
+    stopLayer('birds');
   }
+
+  // 播一聲隨機腳步（一次性，不 loop）
+  async function playFootstep(volume = GAIN.footstep) {
+    if (!audioCtx || audioCtx.state !== 'running') return;
+    try {
+      const url = AUDIO_URLS.steps[Math.floor(Math.random() * AUDIO_URLS.steps.length)];
+      const buf = await loadBuffer(url);
+      const g = audioCtx.createGain();
+      g.gain.value = volume;
+      g.connect(audioCtx.destination);
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      src.connect(g);
+      src.start();
+    } catch (e) {
+      console.warn('[audio] step play failed:', e);
+    }
+  }
+
+  // 連播數個腳步（進入工坊時的「走進去」效果）
+  function playFootstepsWalking(count = 5, interval = 400) {
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => playFootstep(GAIN.footstep - i * 0.05), i * interval);
+    }
+  }
+  // 暴露到 module 範圍讓 door 動畫用得到
+  window.__moriAudio = { playFootstep, playFootstepsWalking };
 
   audioToggle.addEventListener('click', () => {
     audioOn = !audioOn;
@@ -184,16 +236,84 @@
     setTimeout(() => gotoScene('door'), 5200);
   });
 
-  // ----- Door: 推開 → Workshop -----
-  document.getElementById('doorBtn').addEventListener('click', () => {
+  // ----- Door: 拉開 → Workshop（支援按鈕 + 拖曳） -----
+  let doorOpened = false;
+  function openDoor() {
+    if (doorOpened) return;
+    doorOpened = true;
     scenes.door.classList.add('opening');
-    setTimeout(() => gotoScene('workshop'), 2200);
-  });
+    // 腳步聲：門拉開後 800ms 開始走進去，連續 5 步
+    setTimeout(() => {
+      if (window.__moriAudio && audioOn) {
+        window.__moriAudio.playFootstepsWalking(5, 450);
+      }
+    }, 800);
+    setTimeout(() => gotoScene('workshop'), 2400);
+  }
+  document.getElementById('doorBtn').addEventListener('click', openDoor);
+
+  // --- 拖曳互動 ---
+  // 在兩片障子上監聽 pointer 事件
+  // 往中心外拉（左片向左、右片向右）超過門寬 30% 即觸發 openDoor
+  const shojiLeft  = document.querySelector('.shoji-left');
+  const shojiRight = document.querySelector('.shoji-right');
+  function attachDrag(panel, direction /* -1 for left, +1 for right */) {
+    if (!panel) return;
+    let startX = 0;
+    let currentOffset = 0;
+    let dragging = false;
+    const onDown = (e) => {
+      if (doorOpened) return;
+      dragging = true;
+      startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+      panel.style.transition = 'none';
+      panel.setPointerCapture && panel.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    };
+    const onMove = (e) => {
+      if (!dragging) return;
+      const x = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+      const dx = x - startX;
+      // 只允許往外拉（左片負值、右片正值）
+      const valid = (direction === -1 && dx < 0) || (direction === 1 && dx > 0);
+      if (valid) {
+        currentOffset = dx;
+        panel.style.transform = `translateX(${dx}px)`;
+      }
+    };
+    const onUp = (e) => {
+      if (!dragging) return;
+      dragging = false;
+      panel.style.transition = '';
+      const panelWidth = panel.offsetWidth;
+      const ratio = Math.abs(currentOffset) / panelWidth;
+      if (ratio > 0.3) {
+        // 拉開
+        panel.style.transform = '';
+        openDoor();
+      } else {
+        // 回彈
+        panel.style.transform = '';
+      }
+      currentOffset = 0;
+    };
+    panel.addEventListener('pointerdown', onDown);
+    panel.addEventListener('pointermove', onMove);
+    panel.addEventListener('pointerup',   onUp);
+    panel.addEventListener('pointercancel', onUp);
+    panel.addEventListener('pointerleave', (e) => { if (dragging) onUp(e); });
+  }
+  attachDrag(shojiLeft,  -1);
+  attachDrag(shojiRight, +1);
 
   // ----- Workshop: 返回 → Title -----
   document.getElementById('wsBack').addEventListener('click', () => {
     gotoScene('title');
-    scenes.door.classList.remove('opening');
+    // 重置門狀態，下次從 title 再進來可以再拉一次
+    setTimeout(() => {
+      scenes.door.classList.remove('opening');
+      doorOpened = false;
+    }, 1200);
   });
 
   // ----- 渲染魔道具 -----
