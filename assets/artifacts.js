@@ -97,10 +97,11 @@ window.ARTIFACTS = [
     schoolEn: 'Creation',
     repo: 'yazelin/nanobanana-pro',
     lore: '能自動在多個創造之神之間換手，<br>繪製最切合意念的圖像。若一神拒絕，轉請下一神。',
-    effect: 'AI 圖像生成 Agent Skill，支援自動模型 fallback。',
+    effect: 'AI 圖像生成 Agent Skill，支援自動模型 fallback。基於 <a href="https://github.com/yazelin/nanobanana-py" target="_blank" rel="noopener">nanobanana-py</a>（Python 移植自 <a href="https://github.com/doggy8088/nanobanana" target="_blank" rel="noopener">Will 保哥 @doggy8088 的 nanobanana</a>）。',
     actions: [
       { label: 'Article', url: 'https://yazelin.github.io/2026-02-09-nanobanana-pro-clawhub-skill/' },
       { label: 'Source', url: 'https://github.com/yazelin/nanobanana-pro', primary: true },
+      { label: 'Upstream (保哥)', url: 'https://github.com/doggy8088/nanobanana' },
     ],
   },
   {
@@ -127,10 +128,11 @@ window.ARTIFACTS = [
     schoolEn: 'Creation',
     repo: 'yazelin/PromptFill',
     lore: '為繪影魔陣準備咒文草稿的輔助匣。<br>結構化、省去散亂冥想。',
-    effect: '結構化 AI 繪圖 prompt 產生器，適配 Nano Banana Pro。',
+    effect: '結構化 AI 繪圖 prompt 產生器。原始出處 <a href="https://github.com/TanShilongMario/PromptFill" target="_blank" rel="noopener">@TanShilongMario</a>；繁中與諸多改進來自 <a href="https://github.com/doggy8088" target="_blank" rel="noopener">Will 保哥 @doggy8088</a>；由召喚師 × Mori 再補。',
     actions: [
       { label: 'Article', url: 'https://yazelin.github.io/2025-12-29-promptfill-intro/' },
       { label: 'Source', url: 'https://github.com/yazelin/PromptFill', primary: true },
+      { label: 'Upstream (保哥)', url: 'https://github.com/doggy8088/PromptFill' },
     ],
   },
   {
@@ -142,9 +144,10 @@ window.ARTIFACTS = [
     schoolEn: 'Transmutation',
     repo: 'yazelin/MD2DOC-Evolution',
     lore: '將凡人墨跡（Markdown）煉成正式卷軸（Word）。<br>格式可客製化，符合任何行會規範。',
-    effect: 'Markdown → Word，支援自訂樣式、表格、圖片、目錄。Fork 自原作者 + 召喚師 × Mori 共同修訂。',
+    effect: 'Markdown → Word，支援自訂樣式、表格、圖片、目錄。Fork 自 <a href="https://github.com/eric861129" target="_blank" rel="noopener">@eric861129</a>，由召喚師 × Mori 共同修訂。',
     actions: [
       { label: 'Source', url: 'https://github.com/yazelin/MD2DOC-Evolution', primary: true },
+      { label: 'Upstream', url: 'https://github.com/eric861129/MD2DOC-Evolution' },
     ],
   },
   {
@@ -156,10 +159,11 @@ window.ARTIFACTS = [
     schoolEn: 'Transmutation',
     repo: 'yazelin/MD2PPT-Evolution',
     lore: '將墨跡化為幻燈（PPT），<br>可現場投影展示，支援線上宣講模式。',
-    effect: 'Markdown → PPT，含投影模式、語法高亮。Fork 自原作者 + 召喚師 × Mori 共同修訂。',
+    effect: 'Markdown → PPT，含投影模式、語法高亮。Fork 自 <a href="https://github.com/eric861129" target="_blank" rel="noopener">@eric861129</a>，由召喚師 × Mori 共同修訂。',
     actions: [
       { label: 'Article', url: 'https://yazelin.github.io/2026-01-26-md2ppt-doc-sharetoken/' },
       { label: 'Source', url: 'https://github.com/yazelin/MD2PPT-Evolution', primary: true },
+      { label: 'Upstream', url: 'https://github.com/eric861129/MD2PPT-Evolution' },
     ],
   },
   {
