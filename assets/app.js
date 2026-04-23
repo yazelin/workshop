@@ -362,7 +362,7 @@
   };
 
   const grid = document.getElementById('wsGrid');
-  grid.className = 'artifact-cabinet';
+  grid.classList.add('artifact-cabinet');
   window.ARTIFACTS.forEach((a, i) => {
     const schoolSlug = SCHOOL_SLUG[a.school] || 'summoning';
     const niche = document.createElement('button');
