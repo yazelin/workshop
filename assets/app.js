@@ -83,22 +83,36 @@
   setInterval(spawnParticle, 1800);
 
   // ----- 環境音（Web Audio API 生成 drone） -----
-  let audioCtx, droneNodes = [];
+  let audioCtx, masterGain, droneNodes = [], shimmerTimer;
   let audioOn = false;
   const audioToggle = document.getElementById('audioToggle');
   const iconOn  = audioToggle.querySelector('.audio-icon--on');
   const iconOff = audioToggle.querySelector('.audio-icon--off');
 
-  function startAmbient() {
-    if (audioCtx) return;
+  async function startAmbient() {
     try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const master = audioCtx.createGain();
-      master.gain.value = 0.04;
-      master.connect(audioCtx.destination);
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        console.log('[audio] context created, state =', audioCtx.state);
+      }
 
-      // 三個 sine 低頻，微微飄動，製造遠方風聲感
-      [55, 82.4, 110].forEach((freq, i) => {
+      // Chrome/Firefox 要求在 user gesture 內明確 resume
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume();
+        console.log('[audio] resumed, state =', audioCtx.state);
+      }
+
+      // 若已有 drones，不重新建立
+      if (droneNodes.length > 0) return;
+
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      // 3 秒內淡入到可聽但輕柔的音量（0.15 比原本 0.04 大 4 倍）
+      masterGain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 3);
+      masterGain.connect(audioCtx.destination);
+
+      // 三個 sine 低頻（55Hz 低 A、82.4Hz E、110Hz A），略高一個八度讓桌面喇叭聽得到
+      [110, 164.8, 220].forEach((freq, i) => {
         const osc = audioCtx.createOscillator();
         const lfo = audioCtx.createOscillator();
         const lfoGain = audioCtx.createGain();
@@ -106,43 +120,51 @@
         osc.frequency.value = freq;
         osc.type = 'sine';
         lfo.frequency.value = 0.08 + i * 0.03;
-        lfoGain.gain.value = 1 + i * 0.3;
-        gain.gain.value = 0.3 - i * 0.08;
+        lfoGain.gain.value = 2 + i * 0.5;
+        gain.gain.value = 0.4 - i * 0.08;
         lfo.connect(lfoGain);
         lfoGain.connect(osc.frequency);
         osc.connect(gain);
-        gain.connect(master);
+        gain.connect(masterGain);
         osc.start();
         lfo.start();
         droneNodes.push({ osc, lfo, gain });
       });
 
-      // 高頻 shimmer（偶爾出現）
-      setInterval(() => {
-        if (!audioOn || !audioCtx) return;
+      // 高頻 shimmer（偶爾出現，提高音量讓真的聽得到）
+      shimmerTimer = setInterval(() => {
+        if (!audioOn || !audioCtx || audioCtx.state !== 'running') return;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.value = 800 + Math.random() * 400;
+        osc.frequency.value = 880 + Math.random() * 600;
         const now = audioCtx.currentTime;
         gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.02, now + 0.5);
-        gain.gain.linearRampToValueAtTime(0, now + 3);
+        gain.gain.linearRampToValueAtTime(0.08, now + 0.8);
+        gain.gain.linearRampToValueAtTime(0, now + 3.5);
         osc.connect(gain);
-        gain.connect(master);
+        gain.connect(masterGain);
         osc.start(now);
-        osc.stop(now + 3);
-      }, 8000);
+        osc.stop(now + 3.5);
+      }, 7000);
+
+      console.log('[audio] ambient started, ' + droneNodes.length + ' drones');
     } catch (e) {
-      console.warn('Audio unavailable', e);
+      console.error('[audio] failed to start:', e);
+      alert('音訊啟動失敗：' + e.message);
     }
   }
+
   function stopAmbient() {
-    if (!audioCtx) return;
-    droneNodes.forEach(n => { try { n.osc.stop(); n.lfo.stop(); } catch(e){} });
-    droneNodes = [];
-    audioCtx.close();
-    audioCtx = null;
+    if (shimmerTimer) { clearInterval(shimmerTimer); shimmerTimer = null; }
+    if (masterGain && audioCtx) {
+      // 1 秒淡出後停止 oscillators
+      masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
+    }
+    setTimeout(() => {
+      droneNodes.forEach(n => { try { n.osc.stop(); n.lfo.stop(); } catch(e){} });
+      droneNodes = [];
+    }, 1100);
   }
 
   audioToggle.addEventListener('click', () => {
@@ -151,10 +173,12 @@
       startAmbient();
       iconOn.style.display  = 'block';
       iconOff.style.display = 'none';
+      audioToggle.classList.add('active');
     } else {
       stopAmbient();
       iconOn.style.display  = 'none';
       iconOff.style.display = 'block';
+      audioToggle.classList.remove('active');
     }
   });
 
