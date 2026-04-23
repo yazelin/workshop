@@ -863,33 +863,78 @@ button { font-family: inherit; cursor: none; }
   border-radius: inherit;
   pointer-events: none;
 }
-.plate-school {
-  font-family: var(--serif-zh);
-  font-size: 0.62rem;
-  letter-spacing: 0.3em;
-  color: rgba(232, 220, 192, 0.55);
-  margin-bottom: 0.2rem;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-}
 .plate-name-zh {
   font-family: var(--serif-zh);
-  font-size: 0.98rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.15em;
-  color: #e8dcc0;
+  color: #f2e6c6;
   text-shadow:
     0 1px 0 rgba(0,0,0,0.5),
-    0 2px 4px rgba(0,0,0,0.3);
+    0 2px 4px rgba(0,0,0,0.4);
   margin-bottom: 0.15rem;
+  position: relative;
+  z-index: 2;
 }
 .plate-name-en {
   font-family: var(--serif-en);
   font-style: italic;
   font-size: 0.72rem;
   letter-spacing: 0.05em;
-  color: rgba(232, 220, 192, 0.7);
+  color: rgba(242, 230, 198, 0.8);
   text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0.55rem;
 }
+/* 系別標記 — 底部一行，icon + 文字居中 */
+.plate-school {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.65rem;
+  margin: 0.1rem auto 0;
+  border-top: 1px solid rgba(201,162,77,0.35);
+  border-bottom: 1px solid rgba(0,0,0,0.5);
+  font-family: var(--serif-zh);
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  color: #f7e8bf;
+  background: linear-gradient(to bottom,
+    rgba(201,162,77,0.25) 0%,
+    rgba(90,65,30,0.35) 100%);
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.6),
+    0 0 8px rgba(201,162,77,0.3);
+  position: relative;
+  z-index: 2;
+  min-height: 22px;
+}
+.plate-school-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f7e8bf;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.6));
+}
+.plate-school-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.plate-school-name {
+  padding-right: 0.05rem; /* 抵消 letter-spacing 造成的右偏 */
+}
+.niche:hover .plate-school {
+  background: linear-gradient(to bottom,
+    rgba(245,230,163,0.35) 0%,
+    rgba(120,90,40,0.45) 100%);
+  color: #fff;
+}
+.niche:hover .plate-school-icon { color: #fff; }
 
 /* === Hover 互動 === */
 .niche:hover .niche-chamber {

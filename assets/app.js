@@ -401,6 +401,7 @@
     niche.style.animationDelay = (i * 90) + 'ms';
     // 各 niche 的浮動相位不同步（避免 12 個同時上下搖）
     niche.style.setProperty('--float-delay', `${(i * 317) % 4000}ms`);
+    const schoolIconSvg = (window.SCHOOL_ICONS && window.SCHOOL_ICONS[a.school]) || '';
     niche.innerHTML = `
       <div class="niche-chamber">
         <div class="niche-backwall"></div>
@@ -410,9 +411,12 @@
         <div class="niche-floor-shadow"></div>
       </div>
       <div class="niche-plate">
-        <div class="plate-school">${a.school}</div>
         <div class="plate-name-zh">${a.nameZh}</div>
         <div class="plate-name-en">${a.nameEn}</div>
+        <div class="plate-school">
+          <span class="plate-school-icon">${schoolIconSvg}</span>
+          <span class="plate-school-name">${a.school}</span>
+        </div>
       </div>
     `;
     // 音效鉤子
