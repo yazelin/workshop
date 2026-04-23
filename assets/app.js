@@ -432,9 +432,9 @@
       zh: '織命者',
       en: 'Fatebinder',
       glyph: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3 L 6 14 L 11 14 L 10 21 L 18 10 L 13 10 L 14 3 Z"/></svg>`,
-      before: '她只會「回應你」。你沒動作、她靜止。',
-      after: '她開始有「意志」：你關機前自動整理筆記、你 commit 前自動 review 安全問題、你睡覺後整理今天的未完成事項給早上看。你第一次感覺她「活著」。<br><br><em>(每個 CLI 的 hook 事件名不同：Claude Code 最豐富，8 個事件；Gemini 用 BeforeTool/AfterTool；Codex 要啟用 feature flag；Copilot 用 camelCase。詳見你選的 CLI 的文件。)</em>',
-      deliverable: '至少 2 個 hooks 運作中（如：Stop / Session / PreTool 類），她會在你沒注意時幫你做事',
+      before: '她只會「回應你」。對話中你不 prompt 她就靜止。',
+      after: '她在**對話過程**中開始自動做事：<br>· 你開啟 Claude 瞬間（SessionStart）自動載入前一次 session 的待辦清單<br>· 呼叫危險工具前（PreToolUse）自動要求 confirm<br>· 你送出 prompt 瞬間（UserPromptSubmit）自動注入當下專案的 context<br>· 對話結束（Stop）自動把今天學到的東西寫進記憶 — 下次見你不用重新解釋<br><br><em>注意：hook 只在 Claude 這類 session 事件上觸發，不是你關機 / 睡覺時。要「24/7 背景運作」請看 Lv.7 Annuli。</em><br><br><em>每個 CLI 事件名不同：Claude Code 最豐富；Gemini 用 BeforeTool / AfterTool；Codex 要啟用 feature flag；Copilot 用 camelCase。</em>',
+      deliverable: '至少 2 個 hooks 運作中（例如 Stop + PreToolUse），她會在對話內主動做事',
     },
     {
       level: 5,
