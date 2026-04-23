@@ -472,7 +472,6 @@
                    : 'locked';
       return `
         <div class="tree-row" data-status="${status}">
-          <div class="tree-line ${idx === 0 ? 'tree-line--top' : ''}"></div>
           <button class="tree-node" data-level="${q.level}" data-status="${status}">
             <div class="node-glow"></div>
             <div class="node-ring"></div>

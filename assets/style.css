@@ -356,7 +356,6 @@ button { font-family: inherit; cursor: none; }
 .enter-btn:hover {
   border-color: var(--gold);
   color: var(--gold-soft);
-  letter-spacing: 0.4em;
 }
 .enter-btn-en {
   font-family: var(--serif-en);
@@ -1046,7 +1045,6 @@ button { font-family: inherit; cursor: none; }
 .profile-btn:hover {
   border-color: var(--mist-blue);
   color: var(--gold-soft);
-  letter-spacing: 0.4em;
 }
 
 /* ===========================================================
@@ -1190,9 +1188,51 @@ button { font-family: inherit; cursor: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
+  gap: 1.5rem;
   min-height: 100%;
+  position: relative;
+  padding: 2rem 0;
 }
+/* 一條連續的金色主幹貫穿整棵樹 */
+.skill-tree::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 3rem;
+  bottom: 3rem;
+  width: 2px;
+  transform: translateX(-1px);
+  background: linear-gradient(to bottom,
+    rgba(201,162,77,0.6) 0%,
+    rgba(201,162,77,0.4) 50%,
+    rgba(201,162,77,0.25) 100%);
+  z-index: 0;
+}
+/* 從 root 流向 leaf 的螢火光 */
+.skill-tree::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 3rem;
+  width: 2px;
+  height: 80px;
+  transform: translateX(-1px);
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(245,230,163,0.9) 50%,
+    transparent 100%);
+  filter: blur(1px);
+  animation: treeLight 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+@keyframes treeLight {
+  0%   { top: 3rem; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: calc(100% - 3rem - 80px); opacity: 0; }
+}
+
 .tree-row {
   display: grid;
   grid-template-columns: 1fr 120px 1fr;
@@ -1201,28 +1241,7 @@ button { font-family: inherit; cursor: none; }
   width: 100%;
   max-width: 500px;
   position: relative;
-}
-.tree-row .tree-line {
-  grid-column: 2;
-  justify-self: center;
-  width: 2px;
-  height: 50px;
-  background: linear-gradient(to bottom, rgba(201,162,77,0.5) 0%, rgba(201,162,77,0.15) 100%);
-  position: relative;
-}
-.tree-row .tree-line--top { display: none; }
-.tree-row .tree-line::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, transparent, var(--firefly));
-  opacity: 0;
-  animation: treePulse 4s ease-in-out infinite;
-}
-@keyframes treePulse {
-  0%, 100% { opacity: 0; transform: translateY(-100%); }
-  50%      { opacity: 0.6; transform: translateY(100%); }
+  z-index: 2; /* 在金色主幹之上 */
 }
 
 .tree-node {
