@@ -628,6 +628,10 @@
       <h2 class="scroll-name-zh">${a.nameZh}</h2>
       <div class="scroll-name-en">${a.nameEn}</div>
       <div class="scroll-repo">${a.repo}</div>
+      <div class="scroll-wiki-link">
+        <a href="https://yazelin.github.io/world-tree/artifacts/${a.id}"
+           target="_blank" rel="noopener">查世界樹條目 →</a>
+      </div>
       <div class="scroll-section-label">· Lore ·</div>
       <p class="scroll-lore">${a.lore}</p>
       <div class="scroll-section-label">· Effect ·</div>
