@@ -15,8 +15,7 @@
     "icon": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 4,
-      "description": "一個 emoji 字元"
+      "description": "inline SVG 字串（512x512 viewBox，fill=\"currentColor\"）"
     },
     "nameZh": {
       "type": "string",
@@ -33,11 +32,11 @@
     },
     "school": {
       "type": "string",
-      "enum": ["召喚系", "幻術系", "創造系", "煉金系", "次元系", "通靈系", "聲術系"]
+      "enum": ["召喚系", "幻術系", "創造系", "幻境系", "煉金系", "次元系", "通靈系", "聲術系", "精靈系"]
     },
     "schoolEn": {
       "type": "string",
-      "enum": ["Summoning", "Illusion", "Creation", "Transmutation", "Dimensional", "Binding", "Incantation"]
+      "enum": ["Summoning", "Illusion", "Creation", "Reverie", "Transmutation", "Dimensional", "Binding", "Incantation", "Spirit"]
     },
     "repo": {
       "type": "string",
@@ -53,13 +52,13 @@
     "effect": {
       "type": "string",
       "minLength": 10,
-      "maxLength": 200,
-      "description": "技術效能描述，1-2 句"
+      "maxLength": 300,
+      "description": "技術效能描述，1-2 句，可含 <a> 連結"
     },
     "actions": {
       "type": "array",
       "minItems": 1,
-      "maxItems": 3,
+      "maxItems": 4,
       "items": {
         "type": "object",
         "required": ["label", "url"],

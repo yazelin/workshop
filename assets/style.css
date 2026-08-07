@@ -1312,6 +1312,8 @@ button:focus-visible {
 .niche[data-school="dimensional"]  .niche-lighting { background: radial-gradient(ellipse at center 80%, rgba(180,190,240,0.22) 0%, transparent 65%); }
 .niche[data-school="binding"]      .niche-lighting { background: radial-gradient(ellipse at center 80%, rgba(220,180,140,0.25) 0%, transparent 65%); }
 .niche[data-school="incantation"]  .niche-lighting { background: radial-gradient(ellipse at center 80%, rgba(230,200,240,0.22) 0%, transparent 65%); }
+.niche[data-school="reverie"]      .niche-lighting { background: radial-gradient(ellipse at center 80%, rgba(190,170,235,0.24) 0%, transparent 65%); }
+.niche[data-school="spirit"]       .niche-lighting { background: radial-gradient(ellipse at center 80%, rgba(160,225,205,0.24) 0%, transparent 65%); }
 
 /* RWD */
 @media (max-width: 640px) {
