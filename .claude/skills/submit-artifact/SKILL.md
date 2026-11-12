@@ -38,10 +38,12 @@ Based on the artifact's primary function, assign one school:
 | 召喚系 | Summoning | Calls into being: images, notifications, scheduled tasks |
 | 幻術系 | Illusion | Manipulates visual perception |
 | 創造系 | Creation | Uses generative AI to create content |
+| 幻境系 | Reverie | Playable worlds: games, interactive simulations |
 | 煉金系 | Transmutation | Converts formats, transforms data |
 | 次元系 | Dimensional | Stores, routes, or shortens links between spaces |
 | 通靈系 | Binding | Lets AI control external systems (MCP, API bridges) |
 | 聲術系 | Incantation | Handles voice, speech, input methods |
+| 精靈系 | Spirit | The spirit's own body and senses |
 
 If none fit, open an **Issue** first to propose a new school. Do not invent schools inside the PR.
 
@@ -88,7 +90,7 @@ Build the artifact object. Validate against `schemas/artifact.schema.json`.
 ```js
 {
   id: 'kebab-case-id',
-  icon: '✨',
+  icon: ICONS['your-artifact'],  // inline SVG from game-icons.net
   nameZh: '中文名',
   nameEn: 'English Name',
   school: '召喚系',

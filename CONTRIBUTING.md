@@ -23,7 +23,7 @@ Fork → Craft → Offer → Review → Consecrate
 | 欄位 | 型別 | 說明 | 範例 |
 |---|---|---|---|
 | `id` | string | 全站唯一識別（小寫、連字號） | `"my-artifact"` |
-| `icon` | string | Emoji（單一字元） | `"⚡"` |
+| `icon` | string | inline SVG 字串（取自 [game-icons.net](https://game-icons.net)，須加註於 ATTRIBUTION.md） | `ICONS['my-artifact']` |
 | `nameZh` | string | 中文魔道具名（4-8 字，奇幻風） | `"雷鳴呼喚"` |
 | `nameEn` | string | 英文名（Cinzel 字體顯示） | `"Thunder Call"` |
 | `school` | string | 所屬系別（見下表） | `"召喚系"` |
@@ -42,17 +42,19 @@ Fork → Craft → Offer → Review → Consecrate
 | 召喚系 | Summoning | 能喚出實體、圖像、聲音、通知的工具 |
 | 幻術系 | Illusion | 改變觀者視覺體驗、生成錯覺、視覺把戲 |
 | 創造系 | Creation | AI 生成圖/文/音的工具 |
+| 幻境系 | Reverie | 可遊玩的世界：遊戲、互動模擬 |
 | 煉金系 | Transmutation | 格式轉換、資料變形 |
 | 次元系 | Dimensional | 儲存、傳送、連結兩個空間 |
 | 通靈系 | Binding | 讓 AI 能操作外部系統（MCP、API 橋接） |
 | 聲術系 | Incantation | 語音、文字、輸入法 |
+| 精靈系 | Spirit | 精靈本體與其肢體：身體、感官、外貌 |
 
 ### 完整範例條目
 
 ```js
 {
   id: 'thunder-call',
-  icon: '⚡',
+  icon: ICONS['my-artifact'],
   nameZh: '雷鳴呼喚',
   nameEn: 'Thunder Call',
   school: '召喚系',

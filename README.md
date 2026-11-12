@@ -70,10 +70,10 @@ workshop/
 ```js
 {
   id: 'your-artifact',
-  icon: '✨',
+  icon: ICONS['your-artifact'],  // game-icons.net 的 inline SVG，見 ATTRIBUTION.md
   nameZh: '你的魔道具名',
   nameEn: 'Your Artifact',
-  school: '召喚系',  // 召喚/幻術/創造/煉金/次元/通靈/聲術
+  school: '召喚系',  // 召喚/幻術/創造/幻境/煉金/次元/通靈/聲術/精靈
   schoolEn: 'Summoning',
   repo: 'yazelin/your-repo',
   lore: '典故文字...',

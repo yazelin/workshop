@@ -12,17 +12,40 @@ Individual attributions:
 | Artifact | Icon | Artist |
 |---|---|---|
 | Chronocat | cat | Lorc |
+| Glyph Atlas | chameleon-glyph | DarkZaitzev |
+| Glitch OS | android-mask | Lorc |
 | Moodscopia | crystal-ball | Lorc |
+| Chat Mirage | conversation | Lorc |
 | Portrait Circle | pentagram-rose | Lorc |
 | Painted Tome | book-aura | Lorc |
-| Spell Composer | scroll-unfurled | Lorc |
-| Scribe's Hand | quill-ink | Lorc |
-| Lectern of Light | star-altar | Delapouite |
+| Imagegen Forge | spray | Lorc |
+| Sticker Forge | post-stamp | Delapouite |
+| Comic Bench | ink-swirl | Lorc |
+| Mycelium | tree-roots | Delapouite |
+| True Chant | magic-swirl | Lorc |
+| Roll Formosa | stone-sphere | Lorc |
+| K-Rider | full-motorcycle-helmet | Delapouite |
+| Battlefield Editor | crossed-swords | Lorc |
+| CAD Agent | armor-blueprint | seregacthtuf |
+| Marketing Toolbox | toolbox | Delapouite |
 | Shadow Vault | locked-chest | Lorc |
 | Portal Rune | rune-stone | Lorc |
+| Wish Pool | well | Delapouite |
+| Neko Tensei | magic-portal | Lorc |
+| Trial Codex | diploma | Delapouite |
 | Inkseal | wax-seal | Lorc |
 | Ledger Whisper | scales | Lorc |
+| Jaba · 呷爸 | meal | Delapouite |
+| AgentPulse | third-eye | Lorc |
 | Voice Scribe | microphone | Delapouite |
+| Taigi Lexicon | open-book | Lorc |
+| Hakka Lexicon | tied-scroll | Lorc |
+| Taigi Caption | sound-waves | Skoll |
+| Awei Voice | megaphone | Delapouite |
+| Mori's Body | spark-spirit | Lorc |
+| Mori Canvas | easel | Caro Asercion |
+| Mori's Ear | psychic-waves | Lorc |
+| Sprite Loom | puppet | Lorc |
 
 Modifications: stripped the default black background path, changed `fill="#fff"` to `fill="currentColor"` so CSS can control color.
 

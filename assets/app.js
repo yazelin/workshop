@@ -553,12 +553,13 @@
   const SCHOOL_SLUG = {
     '召喚系': 'summoning', '幻術系': 'illusion',   '創造系': 'creation',
     '煉金系': 'transmutation', '次元系': 'dimensional', '通靈系': 'binding',
-    '聲術系': 'incantation',
+    '聲術系': 'incantation', '幻境系': 'reverie',   '精靈系': 'spirit',
   };
   // 每個系別對應一個 chime 頻率（不同音色）
   const SCHOOL_CHIME_HZ = {
     summoning: 520, illusion: 610, creation: 480, transmutation: 580,
     dimensional: 440, binding: 380, incantation: 720,
+    reverie: 660, spirit: 550,
   };
 
   const grid = document.getElementById('wsGrid');
@@ -682,12 +683,6 @@
   function closeRegisterModal() {
     registerBackdrop.classList.remove('active');
   }
-  document.getElementById('registerForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('已記下你的符文。公會正式建成時會通知你。');
-    closeRegisterModal();
-  });
-
   // ----- Parallax on title scene（滑鼠移動時樹影飄動） -----
   document.addEventListener('mousemove', (e) => {
     if (currentScene !== 'title') return;
